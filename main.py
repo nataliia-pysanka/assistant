@@ -11,3 +11,21 @@ def complete(text,state):
 readline.set_completer(complete)
 
 line = input('prompt> ')
+
+class Phone(Field):
+    def __init__(self, value) -> None:
+        super().__init__(value)
+        self.__value = None
+        self.value = value
+
+    @property
+    def phone(self):
+        return self.__value
+
+    @phone.setter
+    def phone(self, value):
+        try:
+            value.isdigit()
+        except:
+            raise ValueError("Value Error, phone should contain numbers")
+        self.__value = value
