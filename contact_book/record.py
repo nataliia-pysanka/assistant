@@ -1,6 +1,9 @@
 import re
+from datetime import datetime
+from datetime import date
 
 class Field:
+
     def __init__(self, value: str) -> None:
         self._value = None
         self.value = value
@@ -15,6 +18,7 @@ class Field:
 
 
 class Name(Field):
+
     def __init__(self, value: str) -> None:
         super().__init__(value)
 
@@ -26,11 +30,9 @@ class Name(Field):
 
 
 class Phone(Field):
+
     def __init__(self, value) -> None:
         super().__init__(value)
-        self.__value = None
-        self.value = value
-
 
     @Field.value.setter
     def phone(self, value):
@@ -42,12 +44,13 @@ class Phone(Field):
 
 
 class Email(Field):
+
     def __init__(self, value: str = '') -> None:
         super().__init__(value)
 
     @Field.value.setter
     def value(self, value: str) -> None:
-        pattern = re.findall(r"[a-zA-Z]+[a-zA-Z0-9._]+@[a-z]+\.[a-z]{2,}"
+        pattern = re.findall(r"[a-zA-Z]+[a-zA-Z0-9._]+@[a-z]+\.[a-z]{2,}")
         if re.match(pattern, value):
             Field.value.fset(self, value)
         else:
@@ -58,11 +61,53 @@ class Email(Field):
 class Record:
 
     def __init__(self, name: Name, num: Phone) -> None:    # + Birthday
+        self._name = None
         self.name = name
-        self.nums = []
+        self._nums = []
         if num:
             self.nums.append(num)
 
+    @property
+    def name(self):
+        return self.name
+
+    @name.setter
+    def name(self, new_name: Name):
+        self._name = new_name
+
+    @property
+    def numbers(self):
+        if self._nums:
+            return self._nums
+
+    def add(self, new_num: Phone):
+        if not isinstance(new_num, Phone):
+            print('\t Number not added, Phone entered incorrectly \n')
+        if new_num.value not in [p.value for p in self.nums]:
+            self.nums.append(new_num)
+            return new_num
+        elif new_num.value not in [p.value for p in self.nums]:
+            print(f'\t The number {new_num.value} already exist \n')
+
+    def remove(self, num: Phone):
+        for i, p in enumerate(self.nums):
+            if not isinstance(num, Phone):
+                print('\t Number not identified, Phone entered incorrectly \n')
+            if num.value == p.value:
+                return self.nums.pop(i)
+            else:
+                print(f'\t The number {num.value} is not found \n')
+
+    def edit(self, num: Phone, new_num: Phone):
+        if self.remove(num):
+            if not isinstance(num, Phone):
+                print('\t Number not found, please enter correctly \n')
+            if not isinstance(new_num, Phone):
+                print('\t Number not changed, Phone entered incorrectly \n')
+            self.nums.append(new_num)
+            return new_num
+
+# + метод days_to_birthday
 
     def __repr__(self):
         return f'{", ".join([p.value for p in self.nums])}'
