@@ -3,6 +3,26 @@ from collections import UserDict
 
 # from faker import Faker
 
+class Field:
+
+  def __init__(self, value):
+    self.value = value
+
+  def __str_(self):
+    return self.value
+
+  def __repr__(self):
+    return self.value
+
+  @property
+  def value(self):
+    return self.__value
+
+  @value.setter
+  def value(self, value):
+    self.__value = value
+
+
 def add_note_command():
     return add_note_command
 
