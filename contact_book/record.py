@@ -60,7 +60,7 @@ class Email(Field):
 
 class Record:
 
-    def __init__(self, name: Name, num: Phone) -> None:    # + Birthday
+    def __init__(self, name: Name, num: Phone = None) -> None:    # + Birthday
         self._name = None
         self.name = name
         self._nums = []
@@ -69,7 +69,7 @@ class Record:
 
     @property
     def name(self):
-        return self.name
+        return self._name
 
     @name.setter
     def name(self, new_name: Name):
@@ -86,26 +86,19 @@ class Record:
         if new_num.value not in [p.value for p in self.nums]:
             self.nums.append(new_num)
             return new_num
-        elif new_num.value not in [p.value for p in self.nums]:
-            print(f'\t The number {new_num.value} already exist \n')
 
     def remove(self, num: Phone):
         for i, p in enumerate(self.nums):
-            if not isinstance(num, Phone):
-                print('\t Number not identified, Phone entered incorrectly \n')
-            if num.value == p.value:
+            if num in self.nums:
                 return self.nums.pop(i)
-            else:
-                print(f'\t The number {num.value} is not found \n')
+            print(f'\t The number {num.value} is not found \n')
 
     def edit(self, num: Phone, new_num: Phone):
         if self.remove(num):
-            if not isinstance(num, Phone):
-                print('\t Number not found, please enter correctly \n')
-            if not isinstance(new_num, Phone):
-                print('\t Number not changed, Phone entered incorrectly \n')
-            self.nums.append(new_num)
-            return new_num
+            if num in self.nums:
+                self.nums.append(new_num)
+                return new_num
+            print (f'\t The number {num.value} is not found \n')
 
 # + метод days_to_birthday
 
