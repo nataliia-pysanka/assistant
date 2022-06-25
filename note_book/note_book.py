@@ -1,7 +1,6 @@
 from collections import UserDict
 import pickle
 from pathlib import Path
-from contact_book.contactbook import ContactBook
 
 # from faker import Faker
 
@@ -83,7 +82,11 @@ class NoteBook(UserDict):
                 self.data = pickle.load(db)
 
     def add(self, note = Note):
-        self.data[note.name.value] = note
+        if isinstance(note, Note):
+            if note.field.value in self.data.keys():
+                self.data.update({note.name.value: note})
+            else:
+                self.data[note.name.value] = note
 
     def search(self, tag: str) -> None:
         if tag in self.tag:
@@ -93,7 +96,8 @@ class NoteBook(UserDict):
             print(f'Tag {tag} not found')
 
     def delete(self, note: Note):
-        self.data[note.name.value]
+        if isinstance(note, Note):
+            del self.data[note.name.value]
 
     def __str__(self):
         res = 'My notes: \n'
@@ -102,6 +106,7 @@ class NoteBook(UserDict):
                 res += f'{key}\n'
             return res
         print ('NoteBook is empty')
+
 
 def add_note_command():
     return add_note_command
