@@ -83,23 +83,33 @@ class Record:
     def add(self, new_num: Phone):
         if not isinstance(new_num, Phone):
             print('\t Number not added, Phone entered incorrectly \n')
+            return
         if new_num.value not in [p.value for p in self.nums]:
             self.nums.append(new_num)
             return new_num
 
     def remove(self, num: Phone):
         for i, p in enumerate(self.nums):
+            if not isinstance(num, Phone):
+                print('\t Number not identified, Phone entered incorrectly \n')
+                return
             if num in self.nums:
                 return self.nums.pop(i)
             print(f'\t The number {num.value} is not found \n')
 
     def edit(self, num: Phone, new_num: Phone):
         if self.remove(num):
-            if num in self.nums:
+            if not isinstance(num, Phone):
+                print('\t Number not found, please enter correctly \n')
+                return
+            if new_num not in self.nums:
+                if not isinstance(new_num, Phone):
+                    print('\t Number not changed, Phone entered incorrectly \n')
+                    return
                 self.nums.append(new_num)
                 return new_num
-            print (f'\t The number {num.value} is not found \n')
-
+            print(f'\t The number already exists \n')
+            
 # + метод days_to_birthday
 
     def __repr__(self):
