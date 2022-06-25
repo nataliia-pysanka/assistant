@@ -1,27 +1,107 @@
 from collections import UserDict
-
+import pickle
+from pathlib import Path
+from contact_book.contactbook import ContactBook
 
 # from faker import Faker
 
 class Field:
+    def __init__(self, value):
+        self.__value = value
+        self.value = value
 
-  def __init__(self, value):
-    self.value = value
+    def __str_(self):
+        return self.value
 
-  def __str_(self):
-    return self.value
+    def __repr__(self):
+        return self.value
 
-  def __repr__(self):
-    return self.value
+    @property
+    def value(self):
+        return self.__value
 
-  @property
-  def value(self):
-    return self.__value
+    @value.setter
+    def value(self, value):
+        self.__value = value
 
-  @value.setter
-  def value(self, value):
-    self.__value = value
 
+class Tag(Field):
+    def __str__(self) -> str:
+        return self.value
+
+    @property
+    def value(self):
+        return self.__value
+
+    @value.setter
+    def value(self, value: str):
+        self.__value = value
+
+
+class Text(Field):
+    @property
+    def value(self) -> str:
+        return self.__value
+
+    @value.setter
+    def value(self, value: str) -> None:
+        if value:
+            self.__value = value
+        print('Empty note')
+
+    def __str__(self) -> str:
+        return self.value
+
+class Name(Field):
+    @property
+    def value(self) -> str:
+        return self.__value
+
+    @value.setter
+    def value(self, value: str) -> None:
+        if value:
+            self.__value = value
+
+    def __str__(self) -> str:
+        return self.value
+
+
+class Note:
+    def __init__(self, data: str, tag: Tag = None) -> None:
+        self.tags = []
+        self.data = data
+        if tag:
+            self.tags.append(tag)
+
+class NoteBook(UserDict):
+    def __init__(self, filename: str) -> None:
+        super().__init__()
+        self.counter = 0
+        self.filename = Path(filename)
+        if self.filename.exists():
+            with open(self.filename, 'rb') as db:
+                self.data = pickle.load(db)
+
+    def add(self, note = Note):
+        self.data[note.name.value] = note
+
+    def search(self, tag: str) -> None:
+        if tag in self.tag:
+            res = self.data.get(tag)
+            print(res)
+        else:
+            print(f'Tag {tag} not found')
+
+    def delete(self, note: Note):
+        self.data[note.name.value]
+
+    def __str__(self):
+        res = 'My notes: \n'
+        if len(self.data) > 0:
+            for key in self.data:
+                res += f'{key}\n'
+            return res
+        print ('NoteBook is empty')
 
 def add_note_command():
     return add_note_command
