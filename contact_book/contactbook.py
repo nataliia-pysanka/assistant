@@ -78,7 +78,69 @@ class ContactBook(UserDict):
         for record in self:
             print(record)
 
+# to Field class
+# @property
+#     def param(self):
+#         return self._param
 
+class Birthday(Field):
+@Field.param.setter
+    def param(self, data):
+        try:
+            self._param = datetime.strptime(data, '%d.%m.%Y').date()
+        except:
+            raise ValueError("Birthday format issue. Please enter birthday in DD.MM.YY format")
+    def days_to_birthday(self):
+        if not self.b_day:
+            return None
+        day_now = datetime.now().date()
+        current_year = self.b_day.param.replace(year=day_now.year)
+        if current_year > day_now:
+            delta = current_year - day_now
+            print(f'You have left {delta.days} to next birthday!')
+            return delta
+        else:
+            next_b_day = current_year.replace(year=day_now.year + 1)
+            delta = next_b_day - day_now
+            print(f'You have left {delta.days} to next birthday!')
+            return delta
+
+commands = {add_command:'add',
+            show_all_command: 'show all',
+            days_to_birthday: 'days left',
+            find_phone_command:'find phone',
+            change_phone_command:'change phone',
+            back_command:'main menu',
+            #optional section
+            change_birthday_command:'change birthday',
+            change_name_command:'change name',
+            change_email_command:'change email'}
+
+
+def parser(user_input: str):
+  for command, input_ in commands.items():
+    for elem in input_:
+      if user_input.lower().startswith(elem.lower()):
+        data = user_input[len(elem):].strip().split(' ')
+        return command, data
+
+def contact_book_main():
+    while True:
+            user_input = input('Please enter your command. Avaliable options are:\n'
+                               '-----> "add"<----- If you use this option, add contact name, optional info - phone, birth date, e-mail\n'
+                               '-----> "show all"<----- If you use this option, no extra input required\n'
+                               '-----> "days left"<----- If you use this option, add contact name\n'
+                               '-----> "find phone"<----- If you use this option, add contact name\n'
+                               '-----> "change phone"<----- If you use this option, add contact name, phone number you whant to change --> desired phone number\n'
+                               '-----> "change birthday"<----- If you use this option, add contact name,  desired birth date\n'
+                               '-----> "change name"<----- If you use this option, add existing contact name, desired contact name\n'
+                               '-----> "change email"<----- If you use this option, add existing e-mail, desired e-mail\n'
+                               '-----> "main menu"<----- If you use this option, you will be sent to main menu\n')
+            command, data = parser(user_input)
+            # command - future function call (add_command, find_phone_command.. etc)
+            print(command(*data))
+            if result is back_command:
+            initial_main()
 # class Record:
 #     """
 #     Class for instance Record
