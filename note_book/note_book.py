@@ -75,11 +75,38 @@ class Name(Field):
 
 class Note:
 
-    def __init__(self, data: str, tag: Tag = None) -> None:
+    def __init__(self, tag: Tag = None, txt: Text = None) -> None:
         self.tags = []
         self.data = data
         if tag:
             self.tags.append(tag)
+
+    def add_tag(self, new_tag: Tag):
+        if not isinstance(new_tag, Tag):
+            print('\t Tag can not be added \n')
+            return
+        if new_tag.value not in [t.value for t in self.tags]:
+            self.tags.append(new_tag)
+            return new_tag
+
+    def add_text(self, new_txt: Text):
+        if not isinstance(new_txt, Tag):
+            print('\t Tag can not be added \n')
+            return
+        if new_tag.value not in [t.value for t in self.tags]:
+            self.tags.append(new_tag)
+            return new_tag
+
+    def delete_note(self, txt: Text):
+        if not isinstance(note, Note):
+            print('\t Number not identified, Phone entered incorrectly \n')
+            return
+        if num in self.nums:
+            i = self.nums.index(num)
+            return self.nums.pop(i)
+        print(f'\t The number {num.value} is not found \n')
+
+
 
 class NoteBook(UserDict):
 
