@@ -1,6 +1,7 @@
 import pytest
 from contact_book.contactbook import ContactBook
 from unittest.mock import MagicMock, PropertyMock
+from datetime import date
 
 
 @pytest.fixture(name="contact_book")
@@ -12,6 +13,8 @@ def fixture_contact_book():
 def fixture_record():
     record = MagicMock()
     type(record).name = PropertyMock(return_value='name')
+    type(record).birthday = PropertyMock(return_value=date(year=2022, month=6, day=24))
+
     return record
 
 
@@ -56,8 +59,15 @@ def test_search_if_no_data(contact_book):
     assert rec is None
     assert len(contact_book.names) == 0
 
-def test_days_to_birthday(self):
-    rec = contact_book.days_to_birthday('02.02.2020')
-    assert rec is None# ??? None
-    assert rec == '35.35.2030' #Bad option
-    assert rec == '01.01.1990' #Good option
+<<<<<<< HEAD
+
+# def test_days_to_birthday(self):
+#     rec = contact_book.days_to_birthday('02.02.2020')
+#     assert rec is None# ??? None
+#     assert rec == '35.35.2030' #Bad option
+#     assert rec == '01.01.1990' #Good option
+=======
+def test_days_to_birthday(contact_book, record):
+    rec = contact_book.days_to_birthday(record)
+    assert rec == 1 #Good option
+>>>>>>> e784107 (Second day commit, menus ready)

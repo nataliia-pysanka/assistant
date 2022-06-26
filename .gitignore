@@ -5,7 +5,7 @@ __pycache__
 
 # virtualenviroment
 myvenv/
-venv/
+venv*/
 menv/
 Pipfile*
 Pipfile.lock

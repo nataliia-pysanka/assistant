@@ -18,47 +18,6 @@ class Field:
         self._value = value
 
 
-class Name(Field):
-
-    def __init__(self, value: str) -> None:
-        super().__init__(value)
-
-    @Field.value.setter
-    def value(self, value: str):
-        if not isinstance(value, str):
-            raise ValueError("Name should be a string")
-        self._value = value
-
-
-class Phone(Field):
-
-    def __init__(self, value) -> None:
-        super().__init__(value)
-
-    @Field.value.setter
-    def phone(self, value):
-        try:
-            value.isdigit()
-        except:
-            raise ValueError("Value Error, phone should contain numbers")
-        self.__value = value
-
-
-class Email(Field):
-
-    def __init__(self, value: str = '') -> None:
-        super().__init__(value)
-
-    @Field.value.setter
-    def value(self, value: str) -> None:
-        pattern = re.findall(r"[a-zA-Z]+[a-zA-Z0-9._]+@[a-z]+\.[a-z]{2,}")
-        if re.match(pattern, value):
-            Field.value.fset(self, value)
-        else:
-            raise ValueError("Please, enter a valid email" +
-                             "Example: example@***.***")
-
-
 class Birthday(Field):
     @Field.value.setter
     def value(self, data):
@@ -84,26 +43,68 @@ class Birthday(Field):
             return delta
 
 
+class Name(Field):
+
+    def __init__(self, value: str) -> None:
+        super().__init__(value)
+
+    @Field.value.setter
+    def value(self, value: str):
+        if not isinstance(value, str):
+            raise ValueError("Name should be a string")
+        self._value = value
+
+
+class Phone(Field):
+
+    def __init__(self, value) -> None:
+        super().__init__(value)
+
+    @Field.value.setter
+    def phone(self, value):
+        try:
+            value.isdigit()
+        except:
+            raise ValueError("Value Error, phone should contain numbers")
+        self._value = value
+
+
+class Email(Field):
+
+    def __init__(self, value: str = '') -> None:
+        super().__init__(value)
+
+    @Field.value.setter
+    def value(self, value: str) -> None:
+        pattern = re.findall(r"[a-zA-Z]+[a-zA-Z0-9._]+@[a-z]+\.[a-z]{2,}")
+        if re.match(pattern, value):
+            Field.value.fset(self, value)
+        else:
+            raise ValueError("Please, enter a valid email" +
+                             "Example: example@***.***")
+
+
 class Record:
     """
     Class for instance Record
     """
 
-    def __init__(self, name: Name, birthday: Birthday, num: Phone = None) -> None:
+    def __init__(self, name: Name = None, num: Phone = None,
+                 birthday: Birthday = None) -> None:
         self._name = None
         self.name = name
         self.birthday = birthday
         self.num = num
-        self._nums = []
+        self.nums = []
         if num:
             self.nums.append(num)
 
     def __str__(self):
         rec = '\t {:<8}...{:<15}'.format('........', '...............') + '\n'
-        rec += '\t {:<8} : {:<15}'.format('Name', self.name) + '\n'
-        rec += '\t {:<8} : {:<15}'.format('Birthday', self.birthday) + '\n'
-        rec += '\t {:<8}...{:<15}'.format('........', '...............') + '\n'
-        rec += '\t {:<8} : {:<15}'.format('Number', self.num) + '\n'
+        for key, value in self.__dict__.items():
+            if key != 'nums':
+                rec += '\t {:<8} : {:<15}'.format(key.upper().replace('_', ''),
+                                                  str(value) if value else '') + '\n'
         rec += '\t {:<8}...{:<15}'.format('........', '...............') + '\n'
         return rec
 
@@ -117,8 +118,8 @@ class Record:
 
     @property
     def numbers(self):
-        if self._nums:
-            return self._nums
+        if self.nums:
+            return self.nums
 
     def add(self, new_num: Phone):
         if not isinstance(new_num, Phone):
@@ -148,7 +149,23 @@ class Record:
         self.remove(num)
         self.nums.append(new_num)
 
+    def serealize(self):
+        """
+        Transform data from object Record to the dictionary
+        :return: dict
+        """
+        dump = {}
+        for key, value in self.__dict__.items():
+            dump.update({key: value})
+        return dump
+
+    def deserealize(self, record):
+        """
+        Transform data from dictionary to object Record
+        :return: dict
+        """
+        for key, value in record.items():
+            self.__dict__[key] = value
+
     def __repr__(self):
         return f'{", ".join([p.value for p in self.nums])}'
-
-
