@@ -5,6 +5,7 @@ from pathlib import Path
 # from faker import Faker
 
 class Field:
+
     def __init__(self, value):
         self.__value = value
         self.value = value
@@ -25,36 +26,27 @@ class Field:
 
 
 class Tag(Field):
+
     def __str__(self) -> str:
         return self.value
 
-    @property
-    def value(self):
-        return self.__value
-
-    @value.setter
-    def value(self, value: str):
-        self.__value = value
-
 
 class Text(Field):
+
     @property
     def value(self) -> str:
-        return self.__value
+        return self.value
 
     @value.setter
     def value(self, value: str) -> None:
         if value:
-            self.__value = value
+            self.value = value
         print('Empty note')
 
     def __str__(self) -> str:
         return self.value
 
 class Name(Field):
-    @property
-    def value(self) -> str:
-        return self.__value
 
     @value.setter
     def value(self, value: str) -> None:
@@ -66,6 +58,7 @@ class Name(Field):
 
 
 class Note:
+
     def __init__(self, data: str, tag: Tag = None) -> None:
         self.tags = []
         self.data = data
@@ -73,6 +66,7 @@ class Note:
             self.tags.append(tag)
 
 class NoteBook(UserDict):
+    
     def __init__(self, filename: str) -> None:
         super().__init__()
         self.counter = 0
