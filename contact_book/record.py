@@ -98,7 +98,7 @@ class Record:
         self.nums = []
         if num:
             self.nums.append(num)
-
+    #
     def __str__(self):
         rec = '\t {:<8}...{:<15}'.format('........', '...............') + '\n'
         for key, value in self.__dict__.items():
