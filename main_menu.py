@@ -1,5 +1,6 @@
 from contact_book.contactbook_menu import contact_book_main
 from note_book.note_book_menu import note_book_main
+from file_work.filework import file_work_main
 
 
 def initial_main():
@@ -14,7 +15,7 @@ def initial_main():
             case '2':  # Entering notebook content
                 note_book_main()
             case '3':  # Entering file mantaining content
-                pass
+                file_work_main()
             case '4':  # Terminating programm
                 break
 
