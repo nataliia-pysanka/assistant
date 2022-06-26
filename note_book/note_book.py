@@ -1,83 +1,77 @@
 from collections import UserDict
 import json
-
 # from faker import Faker
+
 
 class Field:
 
     def __init__(self, value):
-        self.__value = value
+        self._value = None
         self.value = value
 
-    def __str_(self):
-        return self.value
-
-    def __repr__(self):
-        return self.value
 
     @property
     def value(self):
-        return self.__value
+        return self._value
 
     @value.setter
     def value(self, value):
-        self.__value = value
+        self._value = value
 
 
 class Tag(Field):
+    max_tag_length = 10
+    allowed_chars = set(
+        '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
 
     @Field.value.setter
     def value(self, value: str) -> None:
-        max_tag_length = 10
-        allowed_chars = set('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
-
-        if set(value).issubset(allowed_chars):
-            try:
-                len(value) < max_tag_length
-            except:
-                raise AttributeError(f"Tags can only be under {max_tag_length} characters")
-        raise ValueError("Value Error, Tags can only contain letters and numbers")
-
-    def __str__(self) -> str:
-        return self.value
-
-
-class Text(Field):
-
-    @property
-    def value(self) -> str:
-        return self.value
-
-    @value.setter
-    def value(self, value: str) -> None:
-        if value:
-            self.value = value
-        print('Empty note')
-
-    def __str__(self) -> str:
-        return self.value
-
-class Name(Field):
-
-    @Field.value.setter
-    def value(self, value: str) -> None:
-        max_name_length = 15
-
-        try:
-            len(value) < max_name_length
-        except:
-            raise AttributeError(f"Name should contain under {max_name_length} characters")
+        if not set(value).issubset(Tag.allowed_chars):
+            print(f"Tags can only be under {Tag.max_tag_length} characters")
+            return
+        elif len(value) < Tag.max_tag_length:
+            print(f"Tags can be less than {Tag.max_tag_length} characters")
+            return
         self._value = value
 
     def __str__(self) -> str:
         return self.value
 
 
-class Note:
+class Text(Field):
+    max_text_length = 200
 
-    def __init__(self, tag: Tag = None, txt: Text = None) -> None:
+    @Field.value.setter
+    def value(self, value: str):
+        if len(value) > 200:
+            print(f"Text can be less than {Text.max_text_length} characters")
+            return
+        self._value = value
+
+    def __str__(self) -> str:
+        return self.value
+
+
+class Name(Field):
+    max_name_length = 15
+
+    @Field.value.setter
+    def value(self, value: str):
+        if len(value) < Name.max_name_length:
+            print(f"Name should contain under {Name.max_name_length} "
+                  f"characters")
+            return
+        self._value = value
+
+    def __str__(self) -> str:
+        return self.value
+
+
+class Note(UserDict):
+
+    def __init__(self, name: Name, tag: Tag = None, txt: Text = None) -> None:
         self.tags = []
-        self.data = data
+        self.data[name] = txt
         if tag:
             self.tags.append(tag)
 
