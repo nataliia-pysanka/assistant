@@ -1,7 +1,7 @@
 from collections import UserDict
 from contact_book.record import Record
 import json
-from faker import Faker
+#from faker import Faker
 from datetime import datetime
 from random import randint
 

@@ -1,5 +1,5 @@
 from contact_book.contactbook_menu import contact_book_main
-from note_book.note_book import note_book_main
+from note_book.note_book_menu import note_book_main
 
 
 def initial_main():
