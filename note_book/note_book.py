@@ -1,6 +1,5 @@
 from collections import UserDict
 import json
-from pathlib import Path
 
 # from faker import Faker
 
@@ -27,6 +26,18 @@ class Field:
 
 class Tag(Field):
 
+    @Field.value.setter
+    def value(self, value: str) -> None:
+        max_tag_length = 10
+        allowed_chars = set('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+
+        if set(value).issubset(allowed_chars):
+            try:
+                len(value) < max_tag_length
+            except:
+                raise AttributeError(f"Tags can only be under {max_tag_length} characters")
+        raise ValueError("Value Error, Tags can only contain letters and numbers")
+
     def __str__(self) -> str:
         return self.value
 
@@ -50,8 +61,13 @@ class Name(Field):
 
     @Field.value.setter
     def value(self, value: str) -> None:
-        if value:
-            self.__value = value
+        max_name_length = 15
+
+        try:
+            len(value) < max_name_length
+        except:
+            raise AttributeError(f"Name should contain under {max_name_length} characters")
+        self._value = value
 
     def __str__(self) -> str:
         return self.value
