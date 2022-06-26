@@ -18,6 +18,31 @@ class Field:
         self._value = value
 
 
+class Birthday(Field):
+    @Field.value.setter
+    def value(self, data):
+        try:
+            self._value = datetime.strptime(data, '%d.%m.%Y').date()
+        except:
+            raise ValueError(
+                "Birthday format issue. Please enter birthday in DD.MM.YY format")
+
+    def days_to_birthday(self):
+        if not self.value:
+            return None
+        day_now = datetime.now().date()
+        current_year = self.value.param.replace(year=day_now.year)
+        if current_year > day_now:
+            delta = current_year - day_now
+            print(f'You have left {delta.days} to next birthday!')
+            return delta
+        else:
+            next_b_day = current_year.replace(year=day_now.year + 1)
+            delta = next_b_day - day_now
+            print(f'You have left {delta.days} to next birthday!')
+            return delta
+
+
 class Name(Field):
 
     def __init__(self, value: str) -> None:
@@ -41,7 +66,7 @@ class Phone(Field):
             value.isdigit()
         except:
             raise ValueError("Value Error, phone should contain numbers")
-        self.__value = value
+        self._value = value
 
 
 class Email(Field):
@@ -63,25 +88,24 @@ class Record:
     """
     Class for instance Record
     """
-    def __init__(self, name: Name, num: Phone = None, birthday: Birthday) -> None:    # + Birthday
+
+    def __init__(self, name: Name = None, num: Phone = None, birthday: Birthday = None) -> None:
         self._name = None
         self.name = name
         self.birthday = birthday
         self.num = num
-        self._nums = []
+        self.nums = []
         if num:
             self.nums.append(num)
 
-
     def __str__(self):
         rec = '\t {:<8}...{:<15}'.format('........', '...............') + '\n'
-        rec += '\t {:<8} : {:<15}'.format('Name', self.name) + '\n'
-        rec += '\t {:<8} : {:<15}'.format('Birthday', self.birthday) + '\n'
-        rec += '\t {:<8}...{:<15}'.format('........', '...............') + '\n'
-        rec += '\t {:<8} : {:<15}'.format('Number', self.num) + '\n'
+        for key, value in self.__dict__.items():
+            if key != 'nums':
+                rec += '\t {:<8} : {:<15}'.format(key.upper().replace('_', ''),
+                                                  str(value) if value else '') + '\n'
         rec += '\t {:<8}...{:<15}'.format('........', '...............') + '\n'
         return rec
-
 
     @property
     def name(self):
@@ -93,8 +117,8 @@ class Record:
 
     @property
     def numbers(self):
-        if self._nums:
-            return self._nums
+        if self.nums:
+            return self.nums
 
     def add(self, new_num: Phone):
         if not isinstance(new_num, Phone):
@@ -124,33 +148,23 @@ class Record:
         self.remove(num)
         self.nums.append(new_num)
 
-# + метод days_to_birthday
+    def serealize(self):
+        """
+        Transform data from object Record to the dictionary
+        :return: dict
+        """
+        dump = {}
+        for key, value in self.__dict__.items():
+            dump.update({key: value})
+        return dump
+
+    def deserealize(self, record):
+        """
+        Transform data from dictionary to object Record
+        :return: dict
+        """
+        for key, value in record.items():
+            self.__dict__[key] = value
 
     def __repr__(self):
         return f'{", ".join([p.value for p in self.nums])}'
-
-    
-class Birthday(Field):
-    @Field.value.setter
-    def value(self, data):
-        try:
-            self._value = datetime.strptime(data, '%d.%m.%Y').date()
-        except:
-            raise ValueError(
-                "Birthday format issue. Please enter birthday in DD.MM.YY format")
-
-    def days_to_birthday(self):
-        if not self.b_day:
-            return None
-        day_now = datetime.now().date()
-        current_year = self.b_day.param.replace(year=day_now.year)
-        if current_year > day_now:
-            delta = current_year - day_now
-            print(f'You have left {delta.days} to next birthday!')
-            return delta
-        else:
-            next_b_day = current_year.replace(year=day_now.year + 1)
-            delta = next_b_day - day_now
-            print(f'You have left {delta.days} to next birthday!')
-            return delta
-

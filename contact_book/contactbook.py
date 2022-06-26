@@ -1,6 +1,7 @@
 from collections import UserDict
 from contact_book.record import Record
-# from faker import Faker
+import json
+from faker import Faker
 from datetime import datetime
 from random import randint
 
@@ -9,6 +10,7 @@ class ContactBook(UserDict):
     """
     Class-container for different contact records
     """
+
     def __init__(self):
         super().__init__()
         self.counter = 0
@@ -30,7 +32,7 @@ class ContactBook(UserDict):
             for key in self.data:
                 res += f'{key}\n'
             return res
-        return None
+        return ''
 
     def delete(self, key: str) -> bool:
         """
@@ -66,9 +68,16 @@ class ContactBook(UserDict):
         """
         if name in self.names:
             rec = self.data.get(name)
+            return rec
+
+    def display(self, name):
+        """
+        Display specific records
+        :return: None
+        """
+        rec = self.search(name)
+        if rec:
             print(rec)
-        else:
-            print(f'No name {name} in contacts')
 
     def display_all(self):
         """
@@ -78,31 +87,41 @@ class ContactBook(UserDict):
         for record in self:
             print(record)
 
-# to Field class
-# @property
-#     def param(self):
-#         return self._param
+    def __len__(self):
+        return len(self.data)
+
+    def save(self, file_name: str):
+        """
+        Save data in JSON
+        :param file_name: str
+        """
+        dump = []
+        for key, record in self.data.items():
+            dump.append(record.serealize())
+        with open(file_name, 'w', encoding='UTF-8') as file:
+            json.dump(dump, file)
+
+    def load(self, file_name: str):
+        """
+        Load data from JSON to ContactBook object
+        :param file_name: str
+        """
+        self.clear()
+        with open(file_name, 'r', encoding='UTF-8') as file:
+            dump = json.load(file)
+        for record in dump:
+            rec = Record()
+            rec.deserealize(record)
+            self.add(rec)
+
+    def clear(self):
+        """
+        Clear all the data in the ContactBook
+        :return:
+        """
+        self.counter = 0
+        self.names = []
+        self.data = {}
 
 
 
-
-#
-#
-#
-# fake = Faker()
-#
-#
-# def fake_records(book: ContactBook):
-#     for i in range(50):
-#         name = fake.first_name()
-#         date = fake.date_between(start_date='-70y', end_date='-15y')
-#         date_birth = datetime.strftime(date, '%Y-%m-%d')
-#         phone = str(fake.random_number(digits=randint(10, 15)))
-#         rec = Record(name=name, phone=phone, birthday=date_birth)
-#         book.add(rec)
-#     return book
-#
-#
-# book = fake_records(ContactBook())
-# # book.display_all()
-# book.search('Brian')
