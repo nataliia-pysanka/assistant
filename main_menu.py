@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 from contact_book.contactbook_menu import contact_book_main
 from note_book.note_book import note_book_main
 
+=======
+from contact_book.contact_book import *
+from note_book.note_book import *
+>>>>>>> e784107 (Second day commit, menus ready)
 
 def initial_main():
     while True:

@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 import re
 from datetime import datetime
 from datetime import date
+=======
+<<<<<<< Updated upstream
+=======
+from datetime import datetime
+>>>>>>> e784107 (Second day commit, menus ready)
 
 
 class Field:
@@ -27,6 +33,7 @@ class Birthday(Field):
             raise ValueError(
                 "Birthday format issue. Please enter birthday in DD.MM.YY format")
 
+<<<<<<< HEAD
     def days_to_birthday(self):
         if not self.b_day:
             return None
@@ -84,6 +91,12 @@ class Email(Field):
                              "Example: example@***.***")
 
 
+=======
+
+
+
+>>>>>>> Stashed changes
+>>>>>>> e784107 (Second day commit, menus ready)
 class Record:
     """
     Class for instance Record
