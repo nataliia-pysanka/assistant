@@ -1,5 +1,5 @@
 from collections import UserDict
-import pickle
+import json
 from pathlib import Path
 
 # from faker import Faker
@@ -48,7 +48,7 @@ class Text(Field):
 
 class Name(Field):
 
-    @value.setter
+    @Field.value.setter
     def value(self, value: str) -> None:
         if value:
             self.__value = value
@@ -66,14 +66,10 @@ class Note:
             self.tags.append(tag)
 
 class NoteBook(UserDict):
-    
+
     def __init__(self, filename: str) -> None:
         super().__init__()
         self.counter = 0
-        self.filename = Path(filename)
-        if self.filename.exists():
-            with open(self.filename, 'rb') as db:
-                self.data = pickle.load(db)
 
     def add(self, note = Note):
         if isinstance(note, Note):
@@ -101,6 +97,23 @@ class NoteBook(UserDict):
             return res
         print ('NoteBook is empty')
 
+    def save(self, filename: str):
+
+        dump = []
+        for tag, note in self.data.items():
+            dump.append(note.serealize())
+        with open(filename, 'w', encoding='UTF-8') as f:
+            json.dump(dump, f)
+
+    def load(self, filename: str):
+
+        self.clear()
+        with open(filename, 'r', encoding='UTF-8') as f:
+            dump = json.load(f)
+        for note in dump:
+            txt = Note()
+            txt.deserealize(note)
+            self.add(txt)
 
 def add_note_command():
     return add_note_command
