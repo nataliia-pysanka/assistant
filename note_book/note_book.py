@@ -79,15 +79,15 @@ class Note(UserDict):
         if not isinstance(new_tag, Tag):
             print('\t Tag can not be added \n')
             return
-        if new_tag.value not in [t.value for t in self.notes]:
-            self.notes.append(new_tag)
+        if new_tag.value not in [t.value for t in self.tags]:
+            self.tags.append(new_tag)
             return new_tag
 
     def add_text(self, new_txt: Text):
         if not isinstance(new_txt, Text):
             print('\t Tag can not be added \n')
             return
-        if new_txt.value not in [t.value for t in self.notes]:
+        if new_txt.value not in [t.value for t in self.tags]:
             self.notes.append(new_txt)
             return new_txt
 
@@ -99,7 +99,9 @@ class Note(UserDict):
         else:
             print("Couldn't find the note)\n")
 
-
+    def delete_tag(self, tag):
+        if tag.value in [t.value for t in self.tags]:
+            self.tags.remove(tag)
 
 
 class NoteBook(UserDict):
@@ -128,6 +130,19 @@ class NoteBook(UserDict):
 
     def edit_note(self, name: Name, new_note: Note) -> str:
         self.data[name] = new_note
+
+    def find(self, param: str):
+
+        if len(param) < 3:
+            raise ValueError("Param for find must be eq or grater than 3 symbols.")
+
+        notebook = NoteBook()
+
+        for k, v in self.items():
+            if param.lower() in k.lower() or [p.value for p in v.notes if param in p.value]:
+                notebook.add_record(v)
+                continue
+        return notebook
 
     def __str__(self):
         res = 'My notes: \n'
@@ -170,12 +185,12 @@ def show_all():
     else:
         print(nb)
 
-def change_note():
-    сhoose_note = input("Enter the name of the note you'd like to change: \n")
+def change_note(self, name: Name):
+    choose_note = input("Enter needed topic to change:\n")
     if choose_note not in notebook.data.keys():
-        print("This topic does not exist!")
+        print("Note not found")
     else:
-        new_text = input("Enter new note:\n")
-        notebook.edit_note(choose_note, Note(Name(choose_note), Note(new_text)))
+        new_txt = input("Enter new note:\n")
+        notebook.edit_note(choose_note, Note(Name(choose_note), Note(new_txt)))
         notebook.save()
         print("Note changed")
