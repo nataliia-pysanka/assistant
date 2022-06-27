@@ -1,5 +1,5 @@
 from contact_book.contactbook import ContactBook
-from contact_book.record import Record
+from contact_book.record import Record, Name, Phone, Email, Birthday
 from pathlib import Path
 from datetime import datetime
 
@@ -23,7 +23,11 @@ class Session:
 
 def add_command(*args):
     book, name = args
-    rec = Record(name=name)
+    # just for testing !!!!
+    rec = Record(name=Name(name), num=Phone('0669127473'),
+                 email=Email('go@it.com'), birthday=Birthday('30.6.2000'))
+    # rec = Record(name=Name(name), num=Phone('0669127473'),
+    #              email=Email('go@it.com'))
     book.add(rec)
     book.display(name)
     input('Press Enter to back in menu >')
@@ -37,7 +41,16 @@ def show_all_command(*args):
 
 
 def days_to_birthday(*args):
-    return 'days_to_birthday'
+    book, name = args
+    try:
+        delta = book.days_to_birthday(name)
+        if delta:
+            print(delta)
+        else:
+            print('No information')
+        input('Press Enter to back in menu >')
+    except ValueError as err:
+        print(err)
 
 
 def find_phone_command(*args):
@@ -82,7 +95,7 @@ def change_email_command(*args):
 
 commands = {add_command: ['add'],
             show_all_command: ['show all'],
-            # days_to_birthday: ['days left'],
+            days_to_birthday: ['days left'],
             find_phone_command: ['find phone'],
             change_phone_command: ['change phone'],
             back_command: ['main menu'],

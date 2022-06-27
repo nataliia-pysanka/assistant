@@ -49,13 +49,13 @@ class Birthday(Field):
         current_year = self.value.replace(year=day_now.year)
         if current_year > day_now:
             delta = current_year - day_now
-            print(f'You have left {delta.days} to next birthday!')
-            return delta
+            return(f'You have left {delta.days} day(s) to next birthday!')
+            # return delta
         else:
             next_b_day = current_year.replace(year=day_now.year + 1)
             delta = next_b_day - day_now
-            print(f'You have left {delta.days} to next birthday!')
-            return delta
+            return(f'You have left {delta.days} day(s)to next birthday!')
+            # return delta
 
 
 class Name(Field):
@@ -100,6 +100,7 @@ class Phone(Field):
 
         self._value = num
 
+
 class Email(Field):
 
     def __init__(self, value: str = '') -> None:
@@ -138,9 +139,12 @@ class Record:
 
     def print(self):
         rec = f'\t {"." * 30} \n'
-        rec += '\t  {:<8} : {:<15}'.format('NAME', str(self.name)) + '\n'
+        rec += '\t  {:<8} : {:<15}'.format('NAME', str(self.name.value)) + '\n'
 
-        birth = str(self.birthday) if self.birthday else ''
+        if self.birthday:
+            birth = str(self.birthday.value)
+        else:
+            birth = ''
         rec += '\t  {:<8} : {:<15}'.format('BIRTHDAY', birth) + '\n'
 
         indx = 1
