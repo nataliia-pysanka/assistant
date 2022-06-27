@@ -61,13 +61,28 @@ class Phone(Field):
         super().__init__(value)
 
     @Field.value.setter
-    def phone(self, value):
-        try:
-            value.isdigit()
-        except:
-            raise ValueError("Value Error, phone should contain numbers")
-        self._value = value
+    def phone(self, value: str):
+        def is_valid_operator(value) -> bool:
+            if value[:3]:
+                return True
+            raise ValueError("Value Error, operator not valid")
 
+        if value.isdigit():
+            if len(value) == 12:
+                if value[:2] == '38':
+                    return is_valid_operator(value[2:])
+            if len(value) == 10:
+                return is_valid_operator(value)
+        raise ValueError("Value Error, phone should contain numbers")
+
+        def sanitize_phone(value):
+            num = (value.strip()
+                         .removeprefix('+')
+                         .replace("(", '')
+                         .replace(")", '')
+                         .replace(" ", '')
+                         .replace("-", ''))
+            self._value = num
 
 class Email(Field):
 
