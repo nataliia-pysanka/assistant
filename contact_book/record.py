@@ -62,7 +62,9 @@ class Phone(Field):
 
     @Field.value.setter
     def value(self, value: str):
-        if value[:3]:
+        operators = {"067", "068", "096", "097", "098",
+                     "050", "066", "095", "099", "063", "073", "093"}
+        if value[:3] in operators:
             return True
         raise ValueError("Value Error, operator not valid")
 
@@ -180,3 +182,4 @@ class Record:
 
     def __repr__(self):
         return f'{", ".join([p.value for p in self.nums])}'
+
