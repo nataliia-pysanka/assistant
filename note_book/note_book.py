@@ -139,8 +139,8 @@ class NoteBook(UserDict):
         notebook = NoteBook()
 
         for k, v in self.items():
-            if param.lower() in k.lower() or [p.value for p in v.notes if param in p.value]:
-                notebook.add_record(v)
+            if param.lower() in k.lower() or [p.value for p in v.data if param in p.value]:
+                notebook.add(v)
                 continue
         return notebook
 
@@ -185,7 +185,7 @@ def show_all():
     else:
         print(nb)
 
-def change_note(self, name: Name):
+def change_note():
     choose_note = input("Enter needed topic to change:\n")
     if choose_note not in notebook.data.keys():
         print("Note not found")
