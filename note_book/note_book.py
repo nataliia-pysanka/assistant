@@ -31,12 +31,11 @@ class Tag(Field):
     @Field.value.setter
     def value(self, value: str) -> None:
         if not set(value).issubset(Tag.allowed_chars):
-            print(f"{value} Incorrect characters in tag")
-            return
+            raise ValueError(f"Incorrect characters in tag")
         elif len(value) > Tag.max_tag_length:
-            print(f"Tags can be less than {Tag.max_tag_length} characters")
-            return
-        Field.value.fset(self, value)
+            raise ValueError(f"Tags cant be less than {Tag.max_tag_length} characters")
+        # Field.value.fset(self, value)
+        self._value = value
 
 
 class Text(Field):
@@ -71,23 +70,20 @@ class Note:
 
     def add_tag(self, new_tag: Tag):
         if not isinstance(new_tag, Tag):
-            print('\t Tag can not be added \n')
-            return
-        if new_tag.value not in [t.value for t in self.tags]:
+            raise TypeError('\t Tag can not be added \n')
+        if new_tag.value not in self.tags:
             self.tags.append(new_tag)
             return new_tag
 
     def add_text(self, new_txt: Text):
         if not isinstance(new_txt, Text):
-            print('\t Text can not be added \n')
-            return
+            raise TypeError('\t Text can not be added \n')
         if not self.text:
             self.text = new_txt
 
     def delete_tag(self, tag: Tag):
         if not isinstance(tag, Tag):
-            print('\t Number not identified, Phone entered incorrectly \n')
-            return
+            raise TypeError('\t Incorrect type of tag \n')
         if tag in self.tags:
             self.tags.remove(tag)
         else:
