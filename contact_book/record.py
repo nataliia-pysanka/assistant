@@ -61,21 +61,24 @@ class Phone(Field):
         super().__init__(value)
 
     @Field.value.setter
-    def phone(self, value: str):
-        def is_valid_operator(value) -> bool:
-            if value[:3]:
-                return True
-            raise ValueError("Value Error, operator not valid")
+    def value(self, value: str):
+        if value[:3]:
+            return True
+        raise ValueError("Value Error, operator not valid")
 
-        if value.isdigit():
-            if len(value) == 12:
-                if value[:2] == '38':
-                    num = (value.strip().removeprefix('+').replace("(", '').replace(")", '').replace(" ", '').replace("-", ''))
+        num = (value.strip().removeprefix('+').replace("(", '').replace(")", '').replace(" ", '').replace("-", ''))
+        if num.isdigit():
+            if len(num) == 12:
+                if num[:2] == '38':
                     self._value = num
-            if len(value) == 10:
-                num = (value.strip().removeprefix('+').replace("(", '').replace(")", '').replace(" ", '').replace("-", ''))
+                    return
+            if len(num) == 10:
                 self._value = num
-        raise ValueError("Value Error, phone should contain numbers")
+                return
+            else:
+                raise ValueError("Value Error, phone should contain numbers")
+        else:
+            raise ValueError("Value Error, phone should contain numbers")
 
 class Email(Field):
 
