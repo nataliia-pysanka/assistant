@@ -13,10 +13,12 @@ class Session:
 
     def __enter__(self):
         if self.file.exists():
-            self.book.load(str(self.file))
+            pass
+            # self.book.load(str(self.file))
 
     def __exit__(self, exception_type, exception_value, traceback):
-        self.book.save(str(self.file))
+        pass
+        # self.book.save(str(self.file))
 
 
 def add_command(*args):
@@ -24,14 +26,14 @@ def add_command(*args):
     rec = Record(name=name)
     book.add(rec)
     book.display(name)
-    input()
+    input('Press Enter to back in menu >')
 
 
 def show_all_command(*args):
     book, _ = args
     if len(book) > 0:
         book.display_all()
-        input()
+        input('Press Enter to back in menu >')
 
 
 def days_to_birthday(*args):
