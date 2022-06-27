@@ -70,19 +70,12 @@ class Phone(Field):
         if value.isdigit():
             if len(value) == 12:
                 if value[:2] == '38':
-                    return is_valid_operator(value[2:])
+                    num = (value.strip().removeprefix('+').replace("(", '').replace(")", '').replace(" ", '').replace("-", ''))
+                    self._value = num
             if len(value) == 10:
-                return is_valid_operator(value)
+                num = (value.strip().removeprefix('+').replace("(", '').replace(")", '').replace(" ", '').replace("-", ''))
+                self._value = num
         raise ValueError("Value Error, phone should contain numbers")
-
-        def sanitize_phone(value):
-            num = (value.strip()
-                         .removeprefix('+')
-                         .replace("(", '')
-                         .replace(")", '')
-                         .replace(" ", '')
-                         .replace("-", ''))
-            self._value = num
 
 class Email(Field):
 
