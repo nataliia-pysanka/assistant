@@ -79,26 +79,26 @@ class Note(UserDict):
         if not isinstance(new_tag, Tag):
             print('\t Tag can not be added \n')
             return
-        if new_tag.value not in [t.value for t in self.tags]:
-            self.tags.append(new_tag)
+        if new_tag.value not in [t.value for t in self.notes]:
+            self.notes.append(new_tag)
             return new_tag
 
     def add_text(self, new_txt: Text):
-        if not isinstance(new_txt, Tag):
+        if not isinstance(new_txt, Text):
             print('\t Tag can not be added \n')
             return
-        if new_tag.value not in [t.value for t in self.tags]:
-            self.tags.append(new_tag)
-            return new_tag
+        if new_txt.value not in [t.value for t in self.notes]:
+            self.notes.append(new_txt)
+            return new_txt
 
-    def delete_note(self, txt: Text):
-        if not isinstance(note, Note):
-            print('\t Number not identified, Phone entered incorrectly \n')
-            return
-        if num in self.nums:
-            i = self.nums.index(num)
-            return self.nums.pop(i)
-        print(f'\t The number {num.value} is not found \n')
+    def delete_note(self, arg):
+        if arg in notebook.data.keys():
+            del notebook.data[arg]
+            print(f'Note deleted')
+            notebook.save()
+        else:
+            print("Couldn't find the note)\n")
+
 
 
 
@@ -126,6 +126,9 @@ class NoteBook(UserDict):
         if isinstance(note, Note):
             del self.data[note.name.value]
 
+    def edit_note(self, name: Name, new_note: Note) -> str:
+        self.data[name] = new_note
+
     def __str__(self):
         res = 'My notes: \n'
         if len(self.data) > 0:
@@ -152,3 +155,27 @@ class NoteBook(UserDict):
             txt.deserealize(note)
             self.add(txt)
 
+    def __str__(self) -> str:
+        result = "\n".join([str(rec) for rec in self.data.values()])
+        return result
+
+notebook = NoteBook()
+
+notebook.load()
+
+def show_all():
+    nb = str(notebook)
+    if len(nb) == 0:
+        print('No notes to show')
+    else:
+        print(nb)
+
+def change_note():
+    сhoose_note = input("Enter the name of the note you'd like to change: \n")
+    if choose_note not in notebook.data.keys():
+        print("This topic does not exist!")
+    else:
+        new_text = input("Enter new note:\n")
+        notebook.edit_note(choose_note, Note(Name(choose_note), Note(new_text)))
+        notebook.save()
+        print("Note changed")
