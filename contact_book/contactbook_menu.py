@@ -79,7 +79,16 @@ def find_phone_command(*args):
 
 
 def change_phone_command(*args):
-    return 'change_phone_command'
+    book, name = args
+    try:
+        record = book.search(name)
+        if record:
+            record.print()
+        else:
+            print('No information')
+        input('Press Enter to back in menu >')
+    except ValueError as err:
+        print(err)
 
 
 def back_command(*args):
@@ -88,22 +97,6 @@ def back_command(*args):
 
 def change_birthday_command(*args):
     return 'change_birthday_command'
-
-# def days_to_birthday(*args):
-#     if not record.birthday:
-#         return None
-#     day_now = datetime.now().date()
-#     current_year = record.param.replace(year=day_now.year)
-#     if current_year > day_now:
-#         delta = current_year - day_now
-#         print(f'You have left {delta.days} to next birthday!')
-#         return delta
-#     else:
-#         next_b_day = current_year.replace(year=day_now.year + 1)
-#         delta = next_b_day - day_now
-#         print(f'You have left {delta.days} to next birthday!')
-#         return delta
-
 
 
 def change_name_command(*args):
