@@ -61,13 +61,28 @@ class Phone(Field):
         super().__init__(value)
 
     @Field.value.setter
-    def phone(self, value):
-        try:
-            value.isdigit()
-        except:
+    def value(self, value: str):
+        num = (value.strip().removeprefix('+')
+               .replace("(", '')
+               .replace(")", '')
+               .replace(" ", '')
+               .replace("-", ''))
+        if not num.isdigit():
             raise ValueError("Value Error, phone should contain numbers")
-        self._value = value
 
+        if len(num) not in (10, 12):
+            raise ValueError("Value Error, operator not valid")
+
+        operators = {"067", "068", "096", "097", "098",
+                     "050", "066", "095", "099", "063", "073", "093"}
+
+        if len(num) == 12 and num[:2] == '38':
+            num = num[2:]
+
+        if num[:3] not in operators:
+            raise ValueError("Value Error, operator not valid")
+
+        self._value = num
 
 class Email(Field):
 
@@ -169,3 +184,4 @@ class Record:
 
     def __repr__(self):
         return f'{", ".join([p.value for p in self.nums])}'
+
