@@ -66,7 +66,16 @@ def days_to_birthday(*args):
 
 
 def find_phone_command(*args):
-    return 'find_phone_command'
+    book, name = args
+    try:
+        record = book.search(name)
+        if record:
+            record.print()
+        else:
+            print('No information')
+        input('Press Enter to back in menu >')
+    except ValueError as err:
+        print(err)
 
 
 def change_phone_command(*args):
