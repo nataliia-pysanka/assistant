@@ -261,7 +261,6 @@ class Record:
         return f'{", ".join([p.value for p in self.nums])}'
 
 
-<<<<<<< HEAD
 # if __name__ == "__main__":
 #     e = Email('first@go.com')
 #     print(e)
@@ -270,44 +269,13 @@ class Record:
 #     rec.add_email(e)
 #     rec.print()
 #     try:
-#         rec.add_phone(Phone('+38(066)765-43-42'))
-#         rec.add_phone(Phone('095-765-43-39'))
-#         rec.add_phone(Phone('066/765/43/44'))
+#         rec.add_phone(Phone('088765432'))
 #     except ValueError as err:
 #         print(err)
 #     print(rec)
-#
-#     rec.add_email(Email('hello@ukr.net'))
-#     rec.add_email(Email('go@gmail.com'))
-#     print(rec.get_phone('088765434'))
+#     rec.add_phone(Phone('066-765-43-36'))
+#     rec.add_phone(Phone('+38(095)654-34-23'))
 #     rec.print()
-    # # rec.print()
-    # # rec.remove_phone(Phone('088765434'))
-    # # rec.print()
-    # # rec.edit_phone(Phone('088765433'), Phone('999'))
-    # # rec.print()
-    # #
-    # # b = Birthday('01.01.2000')
-    # # print(b.value_as_str)
-    # #
-    # # print(b.days_to_birthday())
-    # # rec.remove_phone(Phone('088765434'))
-=======
-if __name__ == "__main__":
-    e = Email('first@go.com')
-    print(e)
-    rec = Record(name='Kim', email=e)
-    rec.print()
-    rec.add_email(e)
-    rec.print()
-    try:
-        rec.add_phone(Phone('088765432'))
-    except ValueError as err:
-        print(err)
-    print(rec)
-    rec.add_phone(Phone('066-765-43-36'))
-    rec.add_phone(Phone('+38(095)654-34-23'))
-    rec.print()
     # rec.add_email(Email('hello@ukr.net'))
     # rec.add_email(Email('go@gmail.com'))
     # print(rec.get_phone('088765434'))
@@ -322,4 +290,3 @@ if __name__ == "__main__":
     #
     # print(b.days_to_birthday())
     # rec.remove_phone(Phone('088765434'))
->>>>>>> a0e01be (validation in phone setter)
