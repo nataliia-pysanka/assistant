@@ -21,7 +21,7 @@ class ContactBook(UserDict):
         :param rec: Record
         :return:
         """
-        key = rec.name
+        key = rec.name.value
         self[key] = rec
         self.names.append(key)
 
@@ -76,7 +76,7 @@ class ContactBook(UserDict):
         """
         rec = self.search(name)
         if rec:
-            print(rec)
+            rec.print()
 
     def display_all(self):
         """
@@ -84,7 +84,7 @@ class ContactBook(UserDict):
         :return: None
         """
         for record in self:
-            print(record)
+            record.print()
 
     def __len__(self):
         return len(self.data)
@@ -121,6 +121,14 @@ class ContactBook(UserDict):
         self.counter = 0
         self.names = []
         self.data = {}
+
+    def days_to_birthday(self, name: str):
+        rec = self.search(name)
+        if not rec:
+            return 'No record with this name'
+        if rec.birthday:
+            delta = rec.birthday.days_to_birthday()
+            return delta
 
 
 # def fake_records(book: ContactBook):
