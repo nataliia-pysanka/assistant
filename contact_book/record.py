@@ -62,25 +62,27 @@ class Phone(Field):
 
     @Field.value.setter
     def value(self, value: str):
+        num = (value.strip().removeprefix('+')
+               .replace("(", '')
+               .replace(")", '')
+               .replace(" ", '')
+               .replace("-", ''))
+        if not num.isdigit():
+            raise ValueError("Value Error, phone should contain numbers")
+
+        if len(num) not in (10, 12):
+            raise ValueError("Value Error, operator not valid")
+
         operators = {"067", "068", "096", "097", "098",
                      "050", "066", "095", "099", "063", "073", "093"}
-        if value[:3] in operators:
-            return True
-        raise ValueError("Value Error, operator not valid")
 
-        num = (value.strip().removeprefix('+').replace("(", '').replace(")", '').replace(" ", '').replace("-", ''))
-        if num.isdigit():
-            if len(num) == 12:
-                if num[:2] == '38':
-                    self._value = num
-                    return
-            if len(num) == 10:
-                self._value = num
-                return
-            else:
-                raise ValueError("Value Error, phone should contain numbers")
-        else:
-            raise ValueError("Value Error, phone should contain numbers")
+        if len(num) == 12 and num[:2] == '38':
+            num = num[2:]
+
+        if num[:3] not in operators:
+            raise ValueError("Value Error, operator not valid")
+
+        self._value = num
 
 class Email(Field):
 
