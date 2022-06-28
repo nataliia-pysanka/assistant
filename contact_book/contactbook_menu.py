@@ -26,21 +26,20 @@ class Session:
 def add_command(*args):
 
     book = args[0]
-    name = Name(args[1])
+    name = args[1]
     try:
-        phone = Phone(args[2])
+        nums = args[2]
     except KeyError:
-        phone = None
+        nums = None
     try:
-        birthday = Birthday(args[3])
-    except KeyError:
-        birthday = None
-    try:
-        email = Email(args[4])
+        birthday = args[3]
     except KeyError:
         birthday = None
-    rec = Record(name=name, phone=nums, birthday=birthday, email=emails) ###Уточнить
-
+    try:
+        emails =args[4]
+    except KeyError:
+        emails = None
+    rec = Record(name=Name(name), num=Phone(nums), birthday=Birthday(birthday), email=Email(emails)) ###Уточнить
     book.add(rec)
     book.display(name)
     input('Press Enter to back in menu >')
