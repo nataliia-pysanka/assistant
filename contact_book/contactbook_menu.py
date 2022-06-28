@@ -24,6 +24,9 @@ class Session:
 
 
 def add_command(*args):
+    """
+    Adding data to the record command and parameter validation
+    """
     book = args[0]
     name = args[1]
     if name == '':
@@ -75,6 +78,9 @@ def add_command(*args):
 
 
 def show_all_command(*args):
+    """
+    Adding data to the record command and parameter validation
+    """
     book, _ = args
     if len(book) > 0:
         book.display_all()
@@ -82,6 +88,9 @@ def show_all_command(*args):
 
 
 def days_to_birthday(*args):
+    """
+    Getting number of days till the specific person's birthday and validation
+    """
     book, name = args
     try:
         delta = book.days_to_birthday(name)
@@ -95,6 +104,9 @@ def days_to_birthday(*args):
 
 
 def find_phone_command(*args):
+    """
+    Command for getting phone by name and validation
+    """
     book, name = args
     try:
         record = book.search(name)
@@ -108,6 +120,9 @@ def find_phone_command(*args):
 
 
 def change_phone_command(*args):
+    """
+    Command for changing phone by name and validation
+    """
     book = args[0]
     name = args[1]
     try:
@@ -134,18 +149,30 @@ def change_phone_command(*args):
 
 
 def back_command(*args):
+    """
+    CExit back to the menu command
+    """
     return 'back_command'
 
 
 def change_birthday_command(*args):
+    """
+    Change specific person's birth date command
+    """
     return 'change_birthday_command'
 
 
 def change_name_command(*args):
+    """
+    Change specific name command
+    """
     return 'change_name_command'
 
 
 def change_email_command(*args):
+    """
+    Change specific email command
+    """
     return 'change_email_command'
 
 
@@ -173,6 +200,9 @@ inp_vocab_2 = {
 
 
 def prompt_nicely():
+    """
+    Options hint for user input
+    """
     print('Please enter your command. Available options are:\n')
     for comand, prompt in inp_vocab_2.items():
         if comand:
@@ -181,6 +211,9 @@ def prompt_nicely():
 
 
 def parser(user_input: str):
+    """
+    Searching if the given command is available
+    """
     for command, input_ in commands.items():
         for elem in input_:
             if user_input.lower().startswith(elem.lower()):
@@ -192,6 +225,9 @@ def parser(user_input: str):
 
 
 def contact_book_main():
+    """
+    Working with current contactbook session
+    """
     contact_book = ContactBook()
     with Session(FILE_CONTACT_BOOK, contact_book) as session:
         while True:

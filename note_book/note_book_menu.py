@@ -1,33 +1,55 @@
 def add_note_command(*args):
+    """
+    Creating a new note command
+    """
     print(*args)
     return 'add_note_command'
 
 
 def add_tag_command(*args):
+    """
+    Adding a new tag command
+    """
     return 'add_tag_command'
 
 
 def change_text_command(*args):
+    """
+    Editing note content command
+    """
     return 'change_text_command'
 
 
 def show_single_command(*args):
+    """
+    Displaying one of the notes command
+    """
     return 'show_single_command'
 
 
 def show_all_command(*args):
+    """
+    Displaying all of the commands
+    """
     return 'show_all_command'
 
 
 def search_note_command(*args):
+    """
+    Searching the note by tag command
+    """
     return 'search_note_command'
 
 
 def delete_note_command(*args):
+    """
+    Deleting the note byt it's name command
+    """
     return 'delete_note_command'
 
 
 def back_command(*args):
+    """Exit back to the menu command"""
     return 'back_command'
 
 
@@ -51,6 +73,9 @@ inp_vocab = {'add note':'If you use this option, add note heder,optional tag',
             }
 
 def prompt_nicely():
+    """
+    Options hint for user input
+    """
     print('Please enter your command. Available options are:')
     for comand, prompt in inp_vocab.items():
         print("{:^20} {:<100}".format(comand, prompt))
@@ -58,6 +83,9 @@ def prompt_nicely():
 
 
 def parser(user_input: str):
+    """
+    Searching if the given command is available
+    """
     for command, input_ in commands.items():
         for elem in input_:
             if user_input.lower().startswith(elem.lower()):
@@ -69,6 +97,9 @@ def parser(user_input: str):
 
 
 def note_book_main():
+    """
+    User interaction processing
+    """
     while True:
         user_input = prompt_nicely()
         command, data = parser(user_input)
