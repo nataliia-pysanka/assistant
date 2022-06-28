@@ -103,8 +103,12 @@ def show_single_command(*args):
         input('Press Enter to back in menu >')
         return
     note = book.search(name)
-    note.print()
+    if note:
+        note.print()
+    else:
+        print('No note with such name')
     input('Press Enter to back in menu >')
+
 
 def show_all_command(*args):
     book = args[0]
@@ -133,7 +137,7 @@ commands = {add_note_command: ['add note'],
             show_single_command: ['show note'],
             show_all_command: ['show all'],
             search_note_command: ['search note'],
-            delete_note_command: ['delete name'],
+            delete_note_command: ['delete note'],
             back_command: ['main menu']}
 
 inp_vocab = {'add note':'If you use this option, add note heder,optional tag',
