@@ -24,22 +24,29 @@ class Session:
 
 
 def add_command(*args):
-
     book = args[0]
     name = args[1]
+    if name == '':
+        print('Name is obligatory parameter')
+        input('Press Enter to back in menu >')
+        return
+
     try:
-        nums = args[2]
-    except KeyError:
+        nums = None if args[2] == '-' else args[2]
+    except IndexError:
         nums = None
     try:
-        birthday = args[3]
-    except KeyError:
-        birthday = None
+        birthday = '' if args[3] == '-' else args[3]
+    except IndexError:
+        birthday = ''
     try:
-        emails =args[4]
-    except KeyError:
+        emails = None if args[4] == '-' else args[4]
+    except IndexError:
         emails = None
-    rec = Record(name=Name(name), num=Phone(nums), birthday=Birthday(birthday), email=Email(emails)) ###Уточнить
+
+    rec = Record(name=Name(name), num=Phone(nums),
+                 birthday=Birthday(birthday), email=Email(emails))
+
     book.add(rec)
     book.display(name)
     input('Press Enter to back in menu >')
