@@ -89,8 +89,6 @@ class ContactBook(UserDict):
         rec = self.search(name)
         if rec:
             rec.print()
-        else:
-            print(f'There is no records for name {name}')
 
     def display_all(self):
         """
@@ -137,6 +135,10 @@ class ContactBook(UserDict):
         self.data = {}
 
     def days_to_birthday(self, name: str):
+        """
+        Count number of days till specific person's Birthday
+        :param name: str
+        """
         rec = self.search(name)
         if not rec:
             return 'No record with this name'
@@ -145,6 +147,10 @@ class ContactBook(UserDict):
             return delta
 
     def edit_phone(self, name: str, old_num: str, new_num: str):
+        """
+        Change specific phone number
+        :param name: str, old_num: str, new_num: str
+        """
         rec = self.search(name)
         if not rec:
             return 'No record with this name'

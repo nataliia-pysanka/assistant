@@ -4,6 +4,9 @@ from file_work.filework import file_work_main
 
 
 def initial_main():
+    """
+    Initializing the bot and choosing the module by user input
+    """
     while True:
         main_user_input = input('To enter contactbook please enter "1"\n'
                                 'To enter notebook please enter "2"\n'
