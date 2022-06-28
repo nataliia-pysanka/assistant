@@ -120,10 +120,11 @@ class NoteBook(UserDict):
         self.counter = 0
 
     def add(self, note: Note):
-        key = note.name
+        key = note.name.value
         self.data[key] = note
+        print(self.data.keys())
 
-    def search(self, tag: str):
+    def search_tag(self, tag: str):
         for note in self.data.values():
             if note.has_tag(tag):
                 note.print()
@@ -139,6 +140,27 @@ class NoteBook(UserDict):
         """
         for record in self.data.values():
             record.print()
+
+    def search(self, name: str) -> Note:
+        """
+        Search note in storage by name
+        :param name: str
+        :return: Note
+        """
+        if name in self.data.keys():
+            note = self.data.get(name)
+            return note
+
+    def display(self, name):
+        """
+        Display specific records
+        :return: None
+        """
+        note = self.search(name)
+        if note:
+            note.print()
+        else:
+            print(f'There is no records for name {name}')
 
     # def save(self, filename: str):
     #

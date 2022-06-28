@@ -1,6 +1,56 @@
+from note_book.note_book import Note, NoteBook, Text, Tag, Name
+from pathlib import Path
+
+FILE_NOTE_BOOK = 'notebook.json'
+
+
+class Session:
+    def __init__(self, file, book: NoteBook):
+        self.file = Path(file)
+        self.book = book
+
+    def __enter__(self):
+        if self.file.exists():
+            pass
+            # self.book.load(str(self.file))
+
+    def __exit__(self, exception_type, exception_value, traceback):
+        pass
+        # self.book.save(str(self.file))
+
+
 def add_note_command(*args):
-    print(*args)
-    return 'add_note_command'
+    book = args[0]
+    name = args[1]
+    if name == '':
+        print('Name is obligatory parameter')
+        input('Press Enter to back in menu >')
+        return
+    try:
+        name_obj = Name(name)
+    except ValueError as err:
+        print(err)
+        input('Press Enter to back in menu >')
+        return
+
+    tags = []
+    for arg in args[2:]:
+        try:
+            tags.append(Tag(arg))
+        except ValueError as err:
+            print(err)
+
+    text = input(f'Input text (max {Text.max_text_length} symbols) > ')
+    try:
+        text_obj = Text(text)
+    except ValueError as err:
+        print(err)
+        text = None
+
+    note = Note(name=name_obj, text=text_obj, tags=tags)
+    book.add(note)
+    book.display(name)
+    input('Press Enter to back in menu >')
 
 
 def add_tag_command(*args):
@@ -70,10 +120,15 @@ def parser(user_input: str):
 
 
 def note_book_main():
-    while True:
-        user_input = prompt_nicely()
-        command, data = parser(user_input)
-        if command is back_command:
-            return
-        print(command(*data))
+    note_book = NoteBook()
+    with Session(FILE_NOTE_BOOK, note_book) as session:
+        while True:
+            user_input = prompt_nicely()
+            parsered = parser(user_input)
+            if not parsered:
+                continue
+            command, data = parsered
+            if command is back_command:
+                return
+            print(command(note_book, *data))
 
