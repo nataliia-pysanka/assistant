@@ -116,46 +116,13 @@ class Note:
         else:
             print(f'\t The tag {tag} is not found \n')
 
-    # def delete_note(self, arg):
-    # """
-    # Delete specific note cand validation
-    # """
-    #     notebook = NoteBook()
-    #     if arg in notebook.data.keys():
-    #         del notebook.data[arg]
-    #         print(f'Note deleted')
-    #         notebook.save()
-    #     else:
-    #         print("Couldn't find the note)\n")
-
-    # def edit_note(self, text: Text, new_txt: Text):
-    # """
-    # Change note content and validation
-    # :param text: Text, new_txt: Text
-    # """
-    #     if not isinstance(text, Text):
-    #         print('\t Note not found, please enter correctly \n')
-    #         return
-
-    #     note_in_list = self.number_in_list(text)
-    #     if note_in_list:
-    #         note_in_list.value = new_txt.value
-    #         return
-    #     raise ValueError('\t The note was not found \n')
-
-    # def note_in_list(self, text: Text):
-    # """
-    # Get note position for edit_note function
-    # :param text: Text
-    # """
-    #     for pl in self.text:
-    #         if text.value == pl.value:
-    #             return pl
-
     def __str__(self):
         return f'Note: {self.name.value}'
 
     def print(self):
+        """
+        Display all notes content
+        """
         rec = '.' * 120 + '\n'
 
         rec += '\t  {:<8} : {:<15}'.format('NAME', str(self.name.value)) + '\n'
@@ -170,6 +137,10 @@ class Note:
         print(rec)
 
     def has_tag(self, tag: str):
+        """
+        Compare tags for search tag function
+        :param tag: str
+        """
         for tag_value in self.tags:
             if tag_value.value == tag:
                 return True
@@ -242,38 +213,6 @@ class NoteBook(UserDict):
         if note.name in self.data:
             del self.data[note.name]
 
-    # def edit_note(self, name: Name, new_note: Note) -> str:
-    # """
-    # Edit note content notebook
-    # :param name: Name, new_note: Note
-    # """
-    #     self.data[name] = new_note
-
-    # def find(self, param: str):
-    # """
-    # Search notes by user input and validatoin
-    # :param param: str
-    # """
-    #     if len(param) < 3:
-    #         raise ValueError("Param for find must be eq or grater than 3 symbols.")
-    #
-    #     notebook = NoteBook()
-    #
-    #     for k, v in self.items():
-    #         if param.lower() in k.lower() or [p.value for p in v.data if param in p.value]:
-    #             notebook.add(v)
-    #             continue
-    #     return notebook
-
-    # def sort_by_tag(self, tag: Tag):
-    # """
-    # Sort notes by tags
-    # :param tag: Tag
-    # """
-    #     notebook = NoteBook()
-    #     sorted_tags = sorted(notebook, key=itemgetter('tag'))
-
-
     def display_all(self):
         """
         Display all  records
@@ -304,6 +243,10 @@ class NoteBook(UserDict):
             print(f'There is no records for name {name}')
 
     def save(self, filename: str):
+        """
+        Save data in JSON
+        :param filename: str
+        """
         dump = []
         for name, note in self.data.items():
             dump.append(note.serealize())
@@ -311,6 +254,10 @@ class NoteBook(UserDict):
             json.dump(dump, f)
 
     def load(self, filename: str):
+        """
+        Load data from JSON to ContactBook object
+        :param filename: str
+        """
         self.clear()
         with open(filename, 'r', encoding='UTF-8') as f:
             dump = json.load(f)
@@ -339,22 +286,21 @@ class NoteBook(UserDict):
 #         note = Note(name=name, text=text, tags=tags)
 #         book.add(note)
 #     return book
-
-
-if __name__ == '__main__':
-
-    # fake = Faker()
-
-    # tags_names = []
-    # for i in range(10):
-    #     tags_names.append(fake.text(
-    #             max_nb_chars=Tag.max_tag_length)[:-1].replace(' ', '').lower())
-
-    # book = fake_records(NoteBook())
-    # book.display_all()
-    # book.save('notebook.json')
-    # book = NoteBook()
-    # book.load('notebook.json')
-    # book.display_all()
-    # book.display_all()
-    # book.save('contactbook.json')
+#
+#
+# if __name__ == '__main__':
+#     fake = Faker()
+#
+#     tags_names = []
+#     for i in range(10):
+#         tags_names.append(fake.text(
+#                 max_nb_chars=Tag.max_tag_length)[:-1].replace(' ', '').lower())
+#
+#     # book = fake_records(NoteBook())
+#     # book.display_all()
+#     # book.save('notebook.json')
+#     book = NoteBook()
+#     book.load('notebook.json')
+#     book.display_all()
+#     # book.display_all()
+#     # book.save('contactbook.json')
