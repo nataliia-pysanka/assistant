@@ -58,4 +58,3 @@ def test_search_if_no_data(contact_book):
     rec = contact_book.search('name')
     assert rec is None
     assert len(contact_book.names) == 0
-
