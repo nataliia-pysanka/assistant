@@ -131,6 +131,7 @@ def search_note_command(*args):
         input('Press Enter to back in menu >')
         return
     book.search_tag(tag)
+    input('Press Enter to back in menu >')
 
 
 def delete_note_command(*args):

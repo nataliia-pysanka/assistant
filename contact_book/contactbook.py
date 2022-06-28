@@ -51,7 +51,7 @@ class ContactBook(UserDict):
     def __next__(self):
         while self.counter < len(self.names):
             if self.counter > 0 and self.counter % 3 == 0:
-                input()
+                input('Press Enter to continue >')
             index = self.counter
             self.counter += 1
             return self.data[self.names[index]]

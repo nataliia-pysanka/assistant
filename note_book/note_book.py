@@ -153,10 +153,12 @@ class NoteBook(UserDict):
     def __init__(self):
         super().__init__()
         self.counter = 0
+        self.names = []
 
     def add(self, note: Note):
         key = note.name.value
         self.data[key] = note
+        self.names.append(key)
 
     def add_tag(self, name: str, tag_obj: Tag):
         note = self.search(name)
@@ -180,15 +182,16 @@ class NoteBook(UserDict):
                 note.print()
 
     def delete(self, note: Note):
-        if note.name in self.data:
-            del self.data[note.name]
+        if note.name.value in self.names:
+            del self.data[note.name.value]
+            self.names.remove(note.name.value)
 
     def display_all(self):
         """
         Display all  records
         :return: None
         """
-        for record in self.data.values():
+        for record in self:
             record.print()
 
     def search(self, name: str) -> Note:
@@ -235,10 +238,25 @@ class NoteBook(UserDict):
         """
         self.data = {}
 
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        while self.counter < len(self.names):
+            if self.counter > 0 and self.counter % 3 == 0:
+                input('Press Enter to continue >')
+            index = self.counter
+            self.counter += 1
+            return self.data[self.names[index]]
+
+        self.counter = 0
+        raise StopIteration
+
 
 def fake_records(book: NoteBook):
     for i in range(50):
-        name = Name(fake.text(max_nb_chars=Name.max_name_length)[:-1])
+        name = Name(fake.text(max_nb_chars=Name.max_name_length)[:-1].
+                    replace(' ', ''))
         text = Text(fake.text(max_nb_chars=Text.max_text_length)[:-1])
         tags = []
         for _ in range(randint(1, 4)):
