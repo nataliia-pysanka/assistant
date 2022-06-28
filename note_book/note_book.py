@@ -256,32 +256,32 @@ class NoteBook(UserDict):
         raise StopIteration
 
 
-def fake_records(book: NoteBook):
-    for i in range(50):
-        name = Name(fake.text(max_nb_chars=Name.max_name_length)[:-1].
-                    replace(' ', ''))
-        text = Text(fake.text(max_nb_chars=Text.max_text_length)[:-1])
-        tags = []
-        for _ in range(randint(1, 4)):
-            tag = Tag(tags_names[randint(1, len(tags_names)-1)])
-            tags.append(tag)
+# def fake_records(book: NoteBook):
+#     for i in range(50):
+#         name = Name(fake.text(max_nb_chars=Name.max_name_length)[:-1].
+#                     replace(' ', ''))
+#         text = Text(fake.text(max_nb_chars=Text.max_text_length)[:-1])
+#         tags = []
+#         for _ in range(randint(1, 4)):
+#             tag = Tag(tags_names[randint(1, len(tags_names)-1)])
+#             tags.append(tag)
+#
+#         note = Note(name=name, text=text, tags=tags)
+#         book.add(note)
+#     return book
 
-        note = Note(name=name, text=text, tags=tags)
-        book.add(note)
-    return book
 
-
-if __name__ == '__main__':
-    fake = Faker()
-
-    tags_names = []
-    for i in range(10):
-        tags_names.append(fake.text(
-                max_nb_chars=Tag.max_tag_length)[:-1].replace(' ', '').lower())
-
-    book = fake_records(NoteBook())
-    book.display_all()
-    book.save('notebook.json')
+# if __name__ == '__main__':
+#     fake = Faker()
+#
+#     tags_names = []
+#     for i in range(10):
+#         tags_names.append(fake.text(
+#                 max_nb_chars=Tag.max_tag_length)[:-1].replace(' ', '').lower())
+#
+#     book = fake_records(NoteBook())
+#     book.display_all()
+#     book.save('notebook.json')
     # book = NoteBook()
     # book.load('notebook.json')
     # book.display_all()

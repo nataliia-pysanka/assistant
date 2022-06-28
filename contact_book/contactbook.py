@@ -146,27 +146,27 @@ class ContactBook(UserDict):
             return rec
 
 
-operators = ["067", "068", "096", "097", "098",
-             "050", "066", "095", "099", "063", "073", "093"]
-
-
-def fake_records(book: ContactBook):
-    for i in range(50):
-        name = fake.first_name()
-        date = fake.date_between(start_date='-70y', end_date='-15y')
-        date_birth = datetime.strftime(date, '%d.%m.%Y')
-        code = random.choice(operators)
-        phone = code + str(fake.random_number(digits=9, fix_len=True))
-        email = fake.simple_profile()['mail']
-        rec = Record(name=Name(name), num=Phone(phone),
-                     birthday=Birthday(date_birth), email=Email(email))
-        book.add(rec)
-    return book
-
-
-if __name__ == '__main__':
-    fake = Faker()
-
-    book = fake_records(ContactBook())
-    # book.display_all()
-    book.save('contactbook.json')
+# operators = ["067", "068", "096", "097", "098",
+#              "050", "066", "095", "099", "063", "073", "093"]
+#
+#
+# def fake_records(book: ContactBook):
+#     for i in range(50):
+#         name = fake.first_name()
+#         date = fake.date_between(start_date='-70y', end_date='-15y')
+#         date_birth = datetime.strftime(date, '%d.%m.%Y')
+#         code = random.choice(operators)
+#         phone = code + str(fake.random_number(digits=9, fix_len=True))
+#         email = fake.simple_profile()['mail']
+#         rec = Record(name=Name(name), num=Phone(phone),
+#                      birthday=Birthday(date_birth), email=Email(email))
+#         book.add(rec)
+#     return book
+#
+#
+# if __name__ == '__main__':
+#     fake = Faker()
+#
+#     book = fake_records(ContactBook())
+#     # book.display_all()
+#     book.save('contactbook.json')
