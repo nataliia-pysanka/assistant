@@ -280,6 +280,8 @@ class Record:
     def __repr__(self):
         return f'{", ".join([p.value for p in self.nums])}'
 
+    def edit_birthday(self, new_birthday: str):
+        self.birthday.value = new_birthday
 
 # if __name__ == "__main__":
 #     e = Email('first@go.com')

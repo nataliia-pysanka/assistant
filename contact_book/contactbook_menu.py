@@ -116,7 +116,25 @@ def back_command(*args):
 
 
 def change_birthday_command(*args):
-    return 'change_birthday_command'
+    book = args[0]
+    name = args[1]
+    try:
+        new_birthday = args[2]
+    except IndexError:
+        print('You need to put new birthday date')
+        input('Press Enter to back in menu >')
+        return
+
+    try:
+        book.edit_birthday(name, new_birthday)
+        record = book.search(name)
+        if record:
+            record.print()
+        else:
+            print('No information')
+        input('Press Enter to back in menu >')
+    except ValueError as err:
+        print(err)
 
 
 def change_name_command(*args):
@@ -134,7 +152,7 @@ commands = {add_command: ['add'],
             change_phone_command: ['change phone'],
             back_command: ['main menu'],
             # optional section
-            # change_birthday_command: ['change birthday'],
+            change_birthday_command: ['change birthday'],
             change_name_command: ['change name'],
             change_email_command: ['change email']}
 inp_vocab_2 = {
