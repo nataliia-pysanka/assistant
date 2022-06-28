@@ -26,6 +26,10 @@ def add_note_command(*args):
         print('Name is obligatory parameter')
         input('Press Enter to back in menu >')
         return
+    if book.search(name):
+        print('Note with such name already exist')
+        input('Press Enter to back in menu >')
+        return
     try:
         name_obj = Name(name)
     except ValueError as err:
@@ -120,7 +124,13 @@ def show_all_command(*args):
 
 
 def search_note_command(*args):
-    pass
+    book = args[0]
+    tag = args[1]
+    if tag is None:
+        print('No tag to search')
+        input('Press Enter to back in menu >')
+        return
+    book.search_tag(tag)
 
 
 def delete_note_command(*args):
@@ -180,5 +190,5 @@ def note_book_main():
             command, data = parsered
             if command is back_command:
                 return
-            print(command(note_book, *data))
+            command(note_book, *data)
 
