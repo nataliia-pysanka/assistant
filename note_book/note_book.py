@@ -44,9 +44,10 @@ class Text(Field):
     @Field.value.setter
     def value(self, value: str):
         if len(value) > 200:
-            print(f"Text can be less than {Text.max_text_length} characters")
-            return
-        Field.value.fset(self, value)
+            raise ValueError(f"Text can't be less than {Text.max_text_length} "
+                             f"characters")
+        # Field.value.fset(self, value)
+        self._value = value
 
 
 class Name(Field):
@@ -55,9 +56,8 @@ class Name(Field):
     @Field.value.setter
     def value(self, new_value: str):
         if len(new_value) > Name.max_name_length:
-            print(f"Name should contain under {Name.max_name_length} "
-                  f"characters")
-            return
+            raise ValueError(f"Name should contain under "
+                             f"{Name.max_name_length} characters")
         Field.value.fset(self, new_value)
 
 
@@ -90,12 +90,21 @@ class Note:
             print(f'\t The tag {tag} is not found \n')
 
     def __str__(self):
-        rec = '.'*80 + '\n'
-        for key, value in self.__dict__.items():
-            rec += '{:<8} : {:<15}'.format(key.upper().replace('_', ''),
-                                            str(value) if value else '') + '\n'
-        rec = '.'*80 + '\n'
-        return rec
+        return f'Note: {self.name.value}'
+
+    def print(self):
+        rec = '.' * 120 + '\n'
+
+        rec += '\t  {:<8} : {:<15}'.format('NAME', str(self.name.value)) + '\n'
+
+        tags = ' '.join(str(tag.value) for tag in self.tags)
+        rec += '\t  {:<8} : {:<15}'.format(f'TAGS', tags + '\n')
+
+        rec += '.' * 120 + '\n'
+        rec += '{:^120}'.format(self.text.value)
+        rec += '\n'
+        rec += '.' * 120 + '\n'
+        print(rec)
 
 
 class NoteBook(UserDict):
@@ -106,7 +115,7 @@ class NoteBook(UserDict):
 
     def add(self, note: Note):
         key = note.name
-        self[key] = note
+        self.data[key] = note
 
     def search(self, tag: str):
         for note in self.data.values():
@@ -117,21 +126,13 @@ class NoteBook(UserDict):
         if note.name in self.data:
             del self.data[note.name]
 
-    def __str__(self):
-        res = 'My notes: \n'
-        if len(self.data) > 0:
-            for key, value in self.data.items():
-                res += f'{key}\n'
-            return res
-        print('NoteBook is empty')
-
     def display_all(self):
         """
         Display all  records
         :return: None
         """
-        for record in self:
-            print(record)
+        for record in self.data.values():
+            record.print()
 
     # def save(self, filename: str):
     #
@@ -153,7 +154,7 @@ class NoteBook(UserDict):
 
 
 def fake_records(book: NoteBook):
-    for i in range(50):
+    for i in range(1):
         name = Name(fake.text(max_nb_chars=Name.max_name_length)[:-1])
         text = Text(fake.text(max_nb_chars=Text.max_text_length)[:-1])
         tags = []
@@ -163,7 +164,6 @@ def fake_records(book: NoteBook):
             tags.append(tag)
 
         note = Note(name=name, text=text, tags=tags)
-        print(note)
         book.add(note)
     return book
 
