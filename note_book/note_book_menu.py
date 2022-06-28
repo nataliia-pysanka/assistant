@@ -45,7 +45,7 @@ def add_note_command(*args):
         text_obj = Text(text)
     except ValueError as err:
         print(err)
-        text = None
+        text_obj = Text(None)
 
     note = Note(name=name_obj, text=text_obj, tags=tags)
     book.add(note)
@@ -65,14 +65,16 @@ def add_tag_command(*args):
     except IndexError:
         print('No tag to add')
         input('Press Enter to back in menu >')
-
+        return
     try:
         tag_obj = Tag(tag)
     except ValueError as err:
         print(err)
-
+        input('Press Enter to back in menu >')
+        return
     book.add_tag(name, tag_obj)
     book.display(name)
+    input('Press Enter to back in menu >')
 
 
 def change_text_command(*args):
@@ -84,11 +86,14 @@ def show_single_command(*args):
 
 
 def show_all_command(*args):
-    return 'show_all_command'
+    book = args[0]
+    if len(book) > 0:
+        book.display_all()
+        input('Press Enter to back in menu >')
 
 
 def search_note_command(*args):
-    return 'search_note_command'
+    pass
 
 
 def delete_note_command(*args):

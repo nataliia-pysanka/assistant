@@ -101,7 +101,7 @@ class Note:
         rec += '\t  {:<8} : {:<15}'.format('NAME', str(self.name.value)) + '\n'
 
         tags = ' '.join(str(tag.value) for tag in self.tags)
-        rec += '\t  {:<8} : {:<15}'.format(f'TAGS', tags + '\n')
+        rec += '\t  {:<8} : {:<15}'.format(f'TAGS', tags) + '\n'
 
         rec += '.' * 120 + '\n'
         rec += '{:^120}'.format(self.text.value)
