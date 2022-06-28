@@ -1,5 +1,5 @@
 from collections import UserDict
-from contact_book.record import Record
+from contact_book.record import Record, Birthday, Name, Email
 import json
 #from faker import Faker
 from datetime import datetime
@@ -44,6 +44,18 @@ class ContactBook(UserDict):
             self.names.remove(key)
             return True
         return False
+
+    def edit_birthday(self, name: str, new_birthday: str):
+        rec = self.search(name)
+        if not rec:
+            return 'No record with this name'
+        rec.edit_birthday(new_birthday)
+    
+    def edit_name(self, name: str, new_name: str):
+        rec = self.search(name)
+        if not rec:
+            return 'No record with this name'
+        rec.edit_name(new_name)       
 
     def __iter__(self):
         return self
@@ -146,6 +158,12 @@ class ContactBook(UserDict):
         if old_num_obj:
             old_num_obj.value = new_num
             return rec
+    
+    def edit_email(self, name: str, old_email:str, new_email: str):
+        rec = self.search(name)
+        if not rec:
+            return 'No record with this name'
+        rec.edit_email(old_email, new_email)
 
 # def fake_records(book: ContactBook):
 #     for i in range(50):
