@@ -78,11 +78,10 @@ class Note:
             self.tags.append(new_tag)
             return new_tag
 
-    def add_text(self, new_txt: Text):
+    def change_text(self, new_txt: Text):
         if not isinstance(new_txt, Text):
             raise TypeError('\t Text can not be added \n')
-        if not self.text:
-            self.text = new_txt
+        self.text.value = new_txt.value
 
     def delete_tag(self, tag: Tag):
         if not isinstance(tag, Tag):
@@ -162,6 +161,14 @@ class NoteBook(UserDict):
         if note:
             try:
                 note.add_tag(tag_obj)
+            except ValueError as err:
+                print(err)
+
+    def add_text(self, name: str, text: Text):
+        note = self.search(name)
+        if note:
+            try:
+                note.change_text(text)
             except ValueError as err:
                 print(err)
 

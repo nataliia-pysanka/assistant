@@ -78,18 +78,41 @@ def add_tag_command(*args):
 
 
 def change_text_command(*args):
-    return 'change_text_command'
+    book = args[0]
+    name = args[1]
+    if name == '':
+        print('Name is obligatory parameter')
+        input('Press Enter to back in menu >')
+        return
+    text = input(f'Input text (max {Text.max_text_length} symbols) > ')
+    try:
+        text_obj = Text(text)
+    except ValueError as err:
+        print(err)
+        return
+    book.add_text(name, text_obj)
+    book.display(name)
+    input('Press Enter to back in menu >')
 
 
 def show_single_command(*args):
-    return 'show_single_command'
-
+    book = args[0]
+    name = args[1]
+    if name == '':
+        print('Name is obligatory parameter')
+        input('Press Enter to back in menu >')
+        return
+    note = book.search(name)
+    note.print()
+    input('Press Enter to back in menu >')
 
 def show_all_command(*args):
     book = args[0]
     if len(book) > 0:
         book.display_all()
-        input('Press Enter to back in menu >')
+    else:
+        print('No notes')
+    input('Press Enter to back in menu >')
 
 
 def search_note_command(*args):
@@ -116,7 +139,7 @@ commands = {add_note_command: ['add note'],
 inp_vocab = {'add note':'If you use this option, add note heder,optional tag',
             'add tag':'If you use this option, add existing note header and new tag',
             'change text':'If you use this option, add note header and text to replace',
-            'show single':'If you use this option, add note header',
+            'show note':'If you use this option, add note header',
             'show all':'If you use this option, no extra args required',
             'search note':'If you use this option, input to search in tags',
             'delete note':'If you use this option, add note header',
