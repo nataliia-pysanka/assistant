@@ -81,7 +81,10 @@ class Note:
     def change_text(self, new_txt: Text):
         if not isinstance(new_txt, Text):
             raise TypeError('\t Text can not be added \n')
-        self.text.value = new_txt.value
+        if self.text:
+            self.text.value = new_txt.value
+        else:
+            self.text = new_txt
 
     def delete_tag(self, tag: Tag):
         if not isinstance(tag, Tag):
@@ -139,7 +142,7 @@ class Note:
         if note['name']:
             self.name.value = note['name']
         if note['text']:
-            self.add_text(Text(note['text']))
+            self.change_text(Text(note['text']))
         if note['tags']:
             for tag in note['tags']:
                 self.add_tag(Tag(tag))
@@ -154,7 +157,6 @@ class NoteBook(UserDict):
     def add(self, note: Note):
         key = note.name.value
         self.data[key] = note
-        print(self.data.keys())
 
     def add_tag(self, name: str, tag_obj: Tag):
         note = self.search(name)
@@ -256,11 +258,11 @@ if __name__ == '__main__':
         tags_names.append(fake.text(
                 max_nb_chars=Tag.max_tag_length)[:-1].replace(' ', '').lower())
 
-    # book = fake_records(NoteBook())
-    # book.display_all()
-    # book.save('notebook.json')
-    book = NoteBook()
-    book.load('notebook.json')
+    book = fake_records(NoteBook())
     book.display_all()
+    book.save('notebook.json')
+    # book = NoteBook()
+    # book.load('notebook.json')
+    # book.display_all()
     # book.display_all()
     # book.save('contactbook.json')

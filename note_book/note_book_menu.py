@@ -11,12 +11,12 @@ class Session:
 
     def __enter__(self):
         if self.file.exists():
-            pass
-            # self.book.load(str(self.file))
+            # pass
+            self.book.load(str(self.file))
 
     def __exit__(self, exception_type, exception_value, traceback):
-        pass
-        # self.book.save(str(self.file))
+        # pass
+        self.book.save(str(self.file))
 
 
 def add_note_command(*args):
@@ -134,7 +134,18 @@ def search_note_command(*args):
 
 
 def delete_note_command(*args):
-    return 'delete_note_command'
+    book = args[0]
+    name = args[1]
+    if name == '':
+        print('Name is obligatory parameter')
+        input('Press Enter to back in menu >')
+        return
+    note = book.search(name)
+    if note:
+        book.delete(note)
+    else:
+        print('No note with such name')
+    input('Press Enter to back in menu >')
 
 
 def back_command(*args):
