@@ -1,5 +1,7 @@
+from multiprocessing.sharedctypes import Value
+from pyparsing import nums
 from contact_book.contactbook import ContactBook
-from contact_book.record import Record
+from contact_book.record import Record, Name, Phone, Email, Birthday
 from pathlib import Path
 from datetime import datetime
 
@@ -22,8 +24,29 @@ class Session:
 
 
 def add_command(*args):
-    book, name = args
-    rec = Record(name=name)
+    book = args[0]
+    name = args[1]
+    if name == '':
+        print('Name is obligatory parameter')
+        input('Press Enter to back in menu >')
+        return
+
+    try:
+        nums = None if args[2] == '-' else args[2]
+    except IndexError:
+        nums = None
+    try:
+        birthday = '' if args[3] == '-' else args[3]
+    except IndexError:
+        birthday = ''
+    try:
+        emails = None if args[4] == '-' else args[4]
+    except IndexError:
+        emails = None
+
+    rec = Record(name=Name(name), num=Phone(nums),
+                 birthday=Birthday(birthday), email=Email(emails))
+
     book.add(rec)
     book.display(name)
     input('Press Enter to back in menu >')
@@ -37,15 +60,55 @@ def show_all_command(*args):
 
 
 def days_to_birthday(*args):
-    return 'days_to_birthday'
+    book, name = args
+    try:
+        delta = book.days_to_birthday(name)
+        if delta:
+            print(delta)
+        else:
+            print('No information')
+        input('Press Enter to back in menu >')
+    except ValueError as err:
+        print(err)
 
 
 def find_phone_command(*args):
-    return 'find_phone_command'
+    book, name = args
+    try:
+        record = book.search(name)
+        if record:
+            record.print()
+        else:
+            print('No information')
+        input('Press Enter to back in menu >')
+    except ValueError as err:
+        print(err)
 
 
 def change_phone_command(*args):
-    return 'change_phone_command'
+    book = args[0]
+    name = args[1]
+    try:
+        old_num = args[2]
+    except IndexError:
+        print('You need to put old number')
+        input('Press Enter to back in menu >')
+
+    try:
+        new_num = args[3]
+    except IndexError:
+        print('You need to put new number')
+        input('Press Enter to back in menu >')
+
+    try:
+        record = book.edit_phone(name, old_num, new_num)
+        if record:
+            record.print()
+        else:
+            print('No information')
+        input('Press Enter to back in menu >')
+    except ValueError as err:
+        print(err)
 
 
 def back_command(*args):
@@ -54,22 +117,6 @@ def back_command(*args):
 
 def change_birthday_command(*args):
     return 'change_birthday_command'
-
-# def days_to_birthday(*args):
-#     if not record.birthday:
-#         return None
-#     day_now = datetime.now().date()
-#     current_year = record.param.replace(year=day_now.year)
-#     if current_year > day_now:
-#         delta = current_year - day_now
-#         print(f'You have left {delta.days} to next birthday!')
-#         return delta
-#     else:
-#         next_b_day = current_year.replace(year=day_now.year + 1)
-#         delta = next_b_day - day_now
-#         print(f'You have left {delta.days} to next birthday!')
-#         return delta
-
 
 
 def change_name_command(*args):
@@ -82,7 +129,7 @@ def change_email_command(*args):
 
 commands = {add_command: ['add'],
             show_all_command: ['show all'],
-            # days_to_birthday: ['days left'],
+            days_to_birthday: ['days left'],
             find_phone_command: ['find phone'],
             change_phone_command: ['change phone'],
             back_command: ['main menu'],
@@ -104,9 +151,10 @@ inp_vocab_2 = {
 
 
 def prompt_nicely():
-    print('Please enter your command. Available options are:')
+    print('Please enter your command. Available options are:\n')
     for comand, prompt in inp_vocab_2.items():
-        print("{:^18} {:<100}".format(comand, prompt))
+        if comand:
+            print("{:^18} {:<100}".format(comand, prompt))
     return input('>>>')
 
 
@@ -116,6 +164,9 @@ def parser(user_input: str):
             if user_input.lower().startswith(elem.lower()):
                 data = user_input[len(elem):].strip().split(' ')
                 return command, data
+    if user_input not in commands.items():
+        print('You have typed wrong command. Please try again\n')
+        contact_book_main()
 
 
 def contact_book_main():

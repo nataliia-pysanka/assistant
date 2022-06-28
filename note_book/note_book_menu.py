@@ -63,6 +63,9 @@ def parser(user_input: str):
             if user_input.lower().startswith(elem.lower()):
                 data = user_input[len(elem):].strip().split(' ')
                 return command, data
+    if user_input not in commands.items():
+        print('You have typed wrong command. Please try again\n')
+        note_book_main()
 
 
 def note_book_main():
