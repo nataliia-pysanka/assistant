@@ -140,7 +140,6 @@ class Record:
         self._name = None
         self.name = name
         self.birthday = birthday
-
         self.nums = []
         if num:
             self.nums.append(num)
@@ -152,31 +151,31 @@ class Record:
         return f'NAME: {self.name}\n' \
                f'BIRTHDAY: {self.birthday}\n'
 
-    def print(self):
-        rec = f'\t {"." * 30} \n'
-        rec += '\t  {:<8} : {:<15}'.format('NAME', str(self.name.value)) + '\n'
+    # def print(self):
+    #     rec = f'\t {"." * 30} \n'
+    #     rec += '\t  {:<8} : {:<15}'.format('NAME', str(self.name.value)) + '\n'
 
-        if self.birthday.value:
-            birth = str(self.birthday.value)
-        else:
-            birth = ''
-        rec += '\t  {:<8} : {:<15}'.format('BIRTHDAY', birth) + '\n'
+    #     if self.birthday.value:
+    #         birth = str(self.birthday.value)
+    #     else:
+    #         birth = ''
+    #     rec += '\t  {:<8} : {:<15}'.format('BIRTHDAY', birth) + '\n'
 
-        indx = 1
-        for phone in self.nums:
-            num = str(phone.value) if phone.value else ''
-            rec += '\t  {:<8} : {:<15}'.format(f'NUMBER {indx}',
-                                               num) + '\n'
-            indx += 1
+    #     indx = 1
+    #     for phone in self.nums:
+    #         num = str(phone.value) if phone.value else ''
+    #         rec += '\t  {:<8} : {:<15}'.format(f'NUMBER {indx}',
+    #                                            num) + '\n'
+    #         indx += 1
 
-        indx = 1
-        for email in self.emails:
-            mail = str(email.value) if email.value else ''
-            rec += '\t  {:<8} : {:<15}'.format(f'EMAIL {indx}',
-                                               mail) + '\n'
-            indx += 1
-        rec += f'\t {"." * 30} \n'
-        print(rec)
+    #     indx = 1
+    #     for email in self.emails:
+    #         mail = str(email.value) if email.value else ''
+    #         rec += '\t  {:<8} : {:<15}'.format(f'EMAIL {indx}',
+    #                                            mail) + '\n'
+    #         indx += 1
+    #     rec += f'\t {"." * 30} \n'
+    #     print(rec)
 
     @property
     def name(self):
@@ -240,6 +239,30 @@ class Record:
             return
         raise ValueError(f'\t The number {num.value} is not found \n')
 
+    def edit_birthday(self, new_birthday: Birthday):
+        if not isinstance (new_birthday, Birthday):
+            print('\t Birthday date not found, please enter correctly \n')
+            return
+        else:
+            self.birthday = new_birthday.value
+            return self
+
+    def edit_email(self, email: Email, new_email: Email):
+        if not isinstance(email, Email):
+            print('\t Email not found, please enter correctly \n')
+            return
+
+        mail_in_list = self.mail_in_list(email)
+        if mail_in_list:
+            mail_in_list.value = new_email.value
+            return
+        raise ValueError(f'\t Email {email.value} is not found \n')
+
+    def mail_in_list(self, email:Email):
+        for elem in self.email:
+            if elem.value == email.value:
+                return email
+
     def number_in_list(self, num: Phone):
         for number in self.nums:
             if num.value == number.value:
@@ -282,21 +305,22 @@ class Record:
         return f'{", ".join([p.value for p in self.nums])}'
 
 
-# if __name__ == "__main__":
+if __name__ == "__main__":
 #     e = Email('first@go.com')
 #     print(e)
-#     rec = Record(name='Kim', email=e)
-#     rec.print()
+    rec = Record(name='Kim', birthday='01.01.2000')
+ #    print(rec)
 #     rec.add_email(e)
 #     rec.print()
 #     try:
 #         rec.add_phone(Phone('088765432'))
 #     except ValueError as err:
 #         print(err)
-#     print(rec)
-#     rec.add_phone(Phone('066-765-43-36'))
+    
+    rec.edit_birthday( Birthday('02.02.2001'))
+    print(rec)
 #     rec.add_phone(Phone('+38(095)654-34-23'))
-#     rec.print()
+  #   print(f'after method {rec}')
     # rec.add_email(Email('hello@ukr.net'))
     # rec.add_email(Email('go@gmail.com'))
     # print(rec.get_phone('088765434'))

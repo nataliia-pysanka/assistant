@@ -1,5 +1,6 @@
 from collections import UserDict
-from contact_book.record import Record
+from contact_book.record import Birthday, Record
+
 import json
 #from faker import Faker
 from datetime import datetime
@@ -21,7 +22,7 @@ class ContactBook(UserDict):
         :param rec: Record
         :return:
         """
-        key = rec.name.value
+        key = rec.name
         self[key] = rec
         self.names.append(key)
 
@@ -76,7 +77,7 @@ class ContactBook(UserDict):
         """
         rec = self.search(name)
         if rec:
-            rec.print()
+            print(rec)
 
     def display_all(self):
         """
@@ -84,7 +85,15 @@ class ContactBook(UserDict):
         :return: None
         """
         for record in self:
-            record.print()
+            print(record)
+
+    def edit_birthday(self, name:str, new_birthday:Birthday):
+        rec = self.search(name)
+        if not rec:
+            return 'No record with this name'
+        else:
+            rec.edit_birthday(new_birthday)
+            #return rec
 
     def __len__(self):
         return len(self.data)
@@ -122,22 +131,6 @@ class ContactBook(UserDict):
         self.names = []
         self.data = {}
 
-    def days_to_birthday(self, name: str):
-        rec = self.search(name)
-        if not rec:
-            return 'No record with this name'
-        if rec.birthday:
-            delta = rec.birthday.days_to_birthday()
-            return delta
-
-    def edit_phone(self, name: str, old_num: str, new_num: str):
-        rec = self.search(name)
-        if not rec:
-            return 'No record with this name'
-        old_num_obj = rec.get_phone(old_num)
-        if old_num_obj:
-            old_num_obj.value = new_num
-            return rec
 
 # def fake_records(book: ContactBook):
 #     for i in range(50):
@@ -147,7 +140,7 @@ class ContactBook(UserDict):
 #         phone = str(fake.random_number(digits=randint(10, 15)))
 #         rec = Record(name=name, num=phone, birthday=date_birth)
 #         book.add(rec)
-# #     return book
+#     return book
 
 
 # if __name__ == '__main__':
