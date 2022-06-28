@@ -153,11 +153,12 @@ class ContactBook(UserDict):
             old_num_obj.value = new_num
             return rec
     
-    def edit_email(self, name: str, old_email:str, new_email: str):
+    def edit_email(self, name, old_email, new_email):
         rec = self.search(name)
         if not rec:
             return 'No record with this name'
-        rec.edit_email(old_email, new_email)
+        else:
+            return rec.edit_email(Email(old_email), Email(new_email))
 
 # def fake_records(book: ContactBook):
 #     for i in range(50):
