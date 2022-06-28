@@ -50,6 +50,7 @@ inp_vocab = {'add note':'If you use this option, add note heder,optional tag',
             'main menu':'If you use this option, you will be sent to main menu'
             }
 
+
 def prompt_nicely():
     print('Please enter your command. Available options are:')
     for comand, prompt in inp_vocab.items():
@@ -65,14 +66,14 @@ def parser(user_input: str):
                 return command, data
     if user_input not in commands.items():
         print('You have typed wrong command. Please try again\n')
-        note_book_main()
+        return None
 
 
 def note_book_main():
     while True:
         user_input = prompt_nicely()
         command, data = parser(user_input)
-        print(command(*data))
         if command is back_command:
             return
+        print(command(*data))
 
