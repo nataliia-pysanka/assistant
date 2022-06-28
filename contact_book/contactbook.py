@@ -132,7 +132,14 @@ class ContactBook(UserDict):
             delta = rec.birthday.days_to_birthday()
             return delta
 
-    # def edit_phone(self, ):
+    def edit_phone(self, name: str, old_num: str, new_num: str):
+        rec = self.search(name)
+        if not rec:
+            return 'No record with this name'
+        rec.get_phone()
+        if rec.birthday:
+            delta = rec.birthday.days_to_birthday()
+            return delta
 
 # def fake_records(book: ContactBook):
 #     for i in range(50):

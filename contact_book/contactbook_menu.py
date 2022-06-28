@@ -90,7 +90,7 @@ def change_phone_command(*args):
     try:
         record = book.search(name)
         if record:
-            record.print()
+            record.edit_phone()
         else:
             print('No information')
         input('Press Enter to back in menu >')
