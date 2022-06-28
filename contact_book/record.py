@@ -244,10 +244,6 @@ class Record:
             if num.value == number.value:
                 return number
 
-    def email_in_list(self, mail: Email):
-        for email in self.emails:
-            if mail.value == email.value:
-                return email
 
     def get_phone(self, num: str) -> Phone:
         for number in self.nums:
@@ -282,6 +278,28 @@ class Record:
 
     def edit_birthday(self, new_birthday: str):
         self.birthday.value = new_birthday
+
+    def edit_name(self, new_name: str):
+        self.name.value = new_name
+
+    def email_in_list(self, mail: Email):
+        for email in self.emails:
+            if mail.value == email.value:
+                return email
+
+    def edit_email(self, email: Email, new_email: Email):
+        if not isinstance(email, Email):
+            print('\t Email not found, please enter correctly \n')
+            return
+
+        mail_in_list = self.email_in_list(email)
+        if mail_in_list:
+            mail_in_list.value = new_email.value
+            return
+        raise ValueError(f'\t Email {email.value} is not found \n')
+
+
+
 
 # if __name__ == "__main__":
 #     e = Email('first@go.com')

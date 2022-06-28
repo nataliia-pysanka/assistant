@@ -138,11 +138,51 @@ def change_birthday_command(*args):
 
 
 def change_name_command(*args):
-    return 'change_name_command'
+    book = args[0]
+    name = args[1]
+    try:
+        new_name = args[2]
+    except IndexError:
+        print('You need to put new name')
+        input('Press Enter to back in menu >')
+        return
+
+    try:
+        book.edit_name(name, new_name)
+        record = book.search(name)
+        if record:
+            record.print()
+        else:
+            print('No information')
+        input('Press Enter to back in menu >')
+    except ValueError as err:
+        print(err)
 
 
 def change_email_command(*args):
-    return 'change_email_command'
+    book = args[0]
+    name = args[1]
+    try:
+        old_email = args[2]
+    except IndexError:
+        print('You need to put old email')
+        input('Press Enter to back in menu >')
+
+    try:
+        new_email = args[3]
+    except IndexError:
+        print('You need to put new email')
+        input('Press Enter to back in menu >')
+
+    try:
+        record = book.edit_email(name, old_email, new_email)
+        if record:
+            record.print()
+        else:
+            print('No information')
+        input('Press Enter to back in menu >')
+    except ValueError as err:
+        print(err)
 
 
 commands = {add_command: ['add'],
