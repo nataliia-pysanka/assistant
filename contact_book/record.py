@@ -155,7 +155,7 @@ class Record:
         rec = f'\t {"." * 30} \n'
         rec += '\t  {:<8} : {:<15}'.format('NAME', str(self.name.value)) + '\n'
 
-        if self.birthday.value:
+        if self.birthday:
             birth = str(self.birthday.value)
         else:
             birth = ''
@@ -265,8 +265,23 @@ class Record:
         :return: dict
         """
         dump = {}
-        for key, value in self.__dict__.items():
-            dump.update({key: value})
+        if self.name:
+            dump['name'] = self.name.value
+
+        if self.birthday:
+            dump['birthday'] = self.birthday.value_as_str
+
+        phone_for_dump = []
+        if self.nums:
+            for num in self.nums:
+                phone_for_dump.append(num.value)
+            dump['nums'] = phone_for_dump
+
+        email_for_dump = []
+        if self.emails:
+            for mail in self.emails:
+                email_for_dump.append(mail.value)
+            dump['emails'] = email_for_dump
         return dump
 
     def deserealize(self, record):
@@ -274,8 +289,19 @@ class Record:
         Transform data from dictionary to object Record
         :return: dict
         """
-        for key, value in record.items():
-            self.__dict__[key] = value
+        if record['name']:
+            self.name.value = record['name']
+
+        if record.get('birthday'):
+            self.birthday = Birthday(record['birthday'])
+
+        if record.get('nums'):
+            for num in record['nums']:
+                self.add_phone(Phone(num))
+
+        if record.get('emails'):
+            for email in record['emails']:
+                self.add_email(Email(email))
 
     def __repr__(self):
         return f'{", ".join([p.value for p in self.nums])}'

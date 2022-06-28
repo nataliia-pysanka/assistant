@@ -225,7 +225,10 @@ class NoteBook(UserDict):
     def load(self, filename: str):
         self.clear()
         with open(filename, 'r', encoding='UTF-8') as f:
-            dump = json.load(f)
+            try:
+                dump = json.load(f)
+            except ValueError:
+                return
         for note in dump:
             txt = Note(name=Name('temp'))
             txt.deserealize(note)

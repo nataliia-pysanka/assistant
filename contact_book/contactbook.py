@@ -1,15 +1,16 @@
 from collections import UserDict
-from contact_book.record import Record, Name
+from contact_book.record import Record, Name, Birthday, Phone, Email
 import json
 from faker import Faker
 from datetime import datetime
-from random import randint
+import random
 
 
 class ContactBook(UserDict):
     """
     Class-container for different contact records
     """
+
     def __init__(self):
         super().__init__()
         self.counter = 0
@@ -109,7 +110,10 @@ class ContactBook(UserDict):
         """
         self.clear()
         with open(file_name, 'r', encoding='UTF-8') as file:
-            dump = json.load(file)
+            try:
+                dump = json.load(file)
+            except ValueError:
+                return
         for record in dump:
             rec = Record(name=Name('temp'))
             rec.deserealize(record)
@@ -141,20 +145,28 @@ class ContactBook(UserDict):
             old_num_obj.value = new_num
             return rec
 
-# def fake_records(book: ContactBook):
-#     for i in range(50):
-#         name = fake.first_name()
-#         date = fake.date_between(start_date='-70y', end_date='-15y')
-#         date_birth = datetime.strftime(date, '%Y-%m-%d')
-#         phone = str(fake.random_number(digits=randint(10, 15)))
-#         rec = Record(name=name, num=phone, birthday=date_birth)
-#         book.add(rec)
-# #     return book
+
+operators = ["067", "068", "096", "097", "098",
+             "050", "066", "095", "099", "063", "073", "093"]
 
 
-# if __name__ == '__main__':
-#     fake = Faker()
-#
-#     book = fake_records(ContactBook())
-#     # book.display_all()
-#     book.save('contactbook.json')
+def fake_records(book: ContactBook):
+    for i in range(50):
+        name = fake.first_name()
+        date = fake.date_between(start_date='-70y', end_date='-15y')
+        date_birth = datetime.strftime(date, '%d.%m.%Y')
+        code = random.choice(operators)
+        phone = code + str(fake.random_number(digits=9, fix_len=True))
+        email = fake.simple_profile()['mail']
+        rec = Record(name=Name(name), num=Phone(phone),
+                     birthday=Birthday(date_birth), email=Email(email))
+        book.add(rec)
+    return book
+
+
+if __name__ == '__main__':
+    fake = Faker()
+
+    book = fake_records(ContactBook())
+    # book.display_all()
+    book.save('contactbook.json')
