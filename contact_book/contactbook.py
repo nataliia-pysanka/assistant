@@ -77,8 +77,6 @@ class ContactBook(UserDict):
         rec = self.search(name)
         if rec:
             rec.print()
-        else:
-            print(f'There is no records for name {name}')
 
     def display_all(self):
         """

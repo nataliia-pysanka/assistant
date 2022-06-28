@@ -44,8 +44,30 @@ def add_command(*args):
     except IndexError:
         emails = None
 
-    rec = Record(name=Name(name), num=Phone(nums),
-                 birthday=Birthday(birthday), email=Email(emails))
+    try:
+        name_obj = Name(name)
+    except ValueError as err:
+        print(err)
+        return
+
+    try:
+        num_obj = Phone(nums)
+    except ValueError as err:
+        print(err)
+        num_obj = None
+    try:
+        birth_obj = Birthday(birthday)
+    except ValueError as err:
+        print(err)
+        birth_obj = None
+
+    try:
+        email_obj = Email(emails)
+    except ValueError as err:
+        print(err)
+        email_obj = None
+    rec = Record(name=name_obj, num=num_obj,
+                 birthday=birth_obj, email=email_obj)
 
     book.add(rec)
     book.display(name)

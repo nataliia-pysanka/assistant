@@ -140,6 +140,7 @@ class Record:
         self._name = None
         self.name = name
         self.birthday = birthday
+
         self.nums = []
         if num:
             self.nums.append(num)
