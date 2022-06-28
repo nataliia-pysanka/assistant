@@ -11,6 +11,7 @@ class Field:
         self._value = None
         self.value = value
 
+
     @property
     def value(self):
         return self._value
@@ -30,6 +31,9 @@ class Tag(Field):
 
     @Field.value.setter
     def value(self, value: str) -> None:
+        """
+        Tag validation and character limit
+        """
         if not set(value).issubset(Tag.allowed_chars):
             raise ValueError(f"Incorrect characters in tag")
         elif len(value) > Tag.max_tag_length:
@@ -42,6 +46,9 @@ class Text(Field):
 
     @Field.value.setter
     def value(self, value: str):
+        """
+        Character limit for the note content
+        """
         if len(value) > 200:
             raise ValueError(f"Text can't be less than {Text.max_text_length} "
                              f"characters")
@@ -53,6 +60,9 @@ class Name(Field):
 
     @Field.value.setter
     def value(self, new_value: str):
+        """
+        Character limit for the Name parameter
+        """
         if len(new_value) > Name.max_name_length:
             raise ValueError(f"Name should contain under "
                              f"{Name.max_name_length} characters")
@@ -61,8 +71,10 @@ class Name(Field):
     def __str__(self):
         return f'{self.value}'
 
-
 class Note:
+    """
+    Class for instance Note
+    """
 
     def __init__(self, name: Name, text: Text = None, tags: List[Tag] = None):
         self.name = name
@@ -70,6 +82,10 @@ class Note:
         self.text = text if text else None
 
     def add_tag(self, new_tag: Tag):
+        """
+        Validate and add new tag to the notebook
+        :param new_tag: Tag
+        """
         if not isinstance(new_tag, Tag):
             raise TypeError('\t Tag can not be added \n')
         if len(self.tags) == 4:
@@ -79,6 +95,10 @@ class Note:
             return new_tag
 
     def change_text(self, new_txt: Text):
+        """
+        Validate and add new note content to the notebook
+        :param new_txt: Text
+        """
         if not isinstance(new_txt, Text):
             raise TypeError('\t Text can not be added \n')
         if self.text:
@@ -87,6 +107,10 @@ class Note:
             self.text = new_txt
 
     def delete_tag(self, tag: Tag):
+        """
+        Validate and remove specific tag from the notebook
+        :param new_tag: Tag
+        """
         if not isinstance(tag, Tag):
             raise TypeError('\t Incorrect type of tag \n')
         if tag in self.tags:
@@ -98,6 +122,9 @@ class Note:
         return f'Note: {self.name.value}'
 
     def print(self):
+        """
+        Display all notes content
+        """
         rec = '.' * 120 + '\n'
 
         rec += '\t  {:<8} : {:<15}'.format('NAME', str(self.name.value)) + '\n'
@@ -112,6 +139,10 @@ class Note:
         print(rec)
 
     def has_tag(self, tag: str):
+        """
+        Compare tags for search tag function
+        :param tag: str
+        """
         for tag_value in self.tags:
             if tag_value.value == tag:
                 return True
@@ -149,13 +180,19 @@ class Note:
 
 
 class NoteBook(UserDict):
-
+    """
+    Class-container for different note records
+    """
     def __init__(self):
         super().__init__()
         self.counter = 0
         self.names = []
 
     def add(self, note: Note):
+        """
+        Add new record to the storage
+        :param note: Note
+        """
         key = note.name.value
         self.data[key] = note
         self.names.append(key)
@@ -216,6 +253,10 @@ class NoteBook(UserDict):
             print(f'There is no records for name {name}')
 
     def save(self, filename: str):
+        """
+        Save data in JSON
+        :param filename: str
+        """
         dump = []
         for name, note in self.data.items():
             dump.append(note.serealize())
@@ -223,6 +264,10 @@ class NoteBook(UserDict):
             json.dump(dump, f)
 
     def load(self, filename: str):
+        """
+        Load data from JSON to ContactBook object
+        :param filename: str
+        """
         self.clear()
         with open(filename, 'r', encoding='UTF-8') as f:
             try:

@@ -24,6 +24,9 @@ class Session:
 
 
 def add_command(*args):
+    """
+    Adding data to the record command and parameter validation
+    """
     book = args[0]
     name = args[1]
     if name == '':
@@ -44,8 +47,31 @@ def add_command(*args):
     except IndexError:
         emails = None
 
-    rec = Record(name=Name(name), num=Phone(nums),
-                 birthday=Birthday(birthday), email=Email(emails))
+    try:
+        name_obj = Name(name)
+    except ValueError as err:
+        print(err)
+        return
+
+    try:
+        num_obj = Phone(nums)
+    except ValueError as err:
+        print(err)
+        num_obj = None
+    try:
+        birth_obj = Birthday(birthday)
+    except ValueError as err:
+        print(err)
+        birth_obj = None
+
+    try:
+        email_obj = Email(emails)
+    except ValueError as err:
+        print(err)
+        email_obj = None
+
+    rec = Record(name=name_obj, num=num_obj,
+                 birthday=birth_obj, email=email_obj)
 
     book.add(rec)
     book.display(name)
@@ -53,6 +79,9 @@ def add_command(*args):
 
 
 def show_all_command(*args):
+    """
+    Adding data to the record command and parameter validation
+    """
     book, _ = args
     if len(book) > 0:
         book.display_all()
@@ -60,6 +89,9 @@ def show_all_command(*args):
 
 
 def days_to_birthday(*args):
+    """
+    Getting number of days till the specific person's birthday and validation
+    """
     book, name = args
     try:
         delta = book.days_to_birthday(name)
@@ -73,6 +105,9 @@ def days_to_birthday(*args):
 
 
 def find_phone_command(*args):
+    """
+    Command for getting phone by name and validation
+    """
     book, name = args
     try:
         record = book.search(name)
@@ -86,6 +121,9 @@ def find_phone_command(*args):
 
 
 def change_phone_command(*args):
+    """
+    Command for changing phone by name and validation
+    """
     book = args[0]
     name = args[1]
     try:
@@ -112,19 +150,89 @@ def change_phone_command(*args):
 
 
 def back_command():
+    """
+    CExit back to the menu command
+    """
     return 'back_command'
 
 
 def change_birthday_command(*args):
-    return 'change_birthday_command'
+    """
+    Change specific person's birth date command
+    """ 
+    book = args[0]
+    name = args[1]
+    try:
+        new_birthday = args[2]
+    except IndexError:
+        print('You need to put new birthday date')
+        input('Press Enter to back in menu >')
+        return
+
+    try:
+        book.edit_birthday(name, new_birthday)
+        record = book.search(name)
+        if record:
+            record.print()
+        else:
+            print('No information')
+        input('Press Enter to back in menu >')
+    except ValueError as err:
+        print(err)
 
 
 def change_name_command(*args):
-    return 'change_name_command'
+    """
+    Change specific name command
+    """
+    book = args[0]
+    name = args[1]
+    try:
+        new_name = args[2]
+    except IndexError:
+        print('You need to put new name')
+        input('Press Enter to back in menu >')
+        return
+
+    try:
+        book.edit_name(name, new_name)
+        record = book.search(name)
+        if record:
+            record.print()
+        else:
+            print('No information')
+        input('Press Enter to back in menu >')
+    except ValueError as err:
+        print(err)
 
 
 def change_email_command(*args):
-    return 'change_email_command'
+    """
+        Change specific email command
+    """
+    book = args[0]
+    name = args[1]
+    try:
+        old_email = args[2]
+    except IndexError:
+        print('You need to put old email')
+        input('Press Enter to back in menu >')
+
+    try:
+        new_email = args[3]
+    except IndexError:
+        print('You need to put new email')
+        input('Press Enter to back in menu >')
+
+    try:
+        record = book.edit_email(name, old_email, new_email)
+        if record:
+            record.print()
+        else:
+            print('No information')
+        input('Press Enter to back in menu >')
+    except ValueError as err:
+        print(err)
 
 
 commands = {add_command: ['add'],
@@ -134,7 +242,7 @@ commands = {add_command: ['add'],
             change_phone_command: ['change phone'],
             back_command: ['main menu'],
             # optional section
-            # change_birthday_command: ['change birthday'],
+            change_birthday_command: ['change birthday'],
             change_name_command: ['change name'],
             change_email_command: ['change email']}
 inp_vocab_2 = {
@@ -151,6 +259,9 @@ inp_vocab_2 = {
 
 
 def prompt_nicely():
+    """
+    Options hint for user input
+    """
     print('Please enter your command. Available options are:\n')
     for comand, prompt in inp_vocab_2.items():
         if comand:
@@ -159,6 +270,9 @@ def prompt_nicely():
 
 
 def parser(user_input: str):
+    """
+    Searching if the given command is available
+    """
     for command, input_ in commands.items():
         for elem in input_:
             if user_input.lower().startswith(elem.lower()):
@@ -170,6 +284,9 @@ def parser(user_input: str):
 
 
 def contact_book_main():
+    """
+    Working with current contactbook session
+    """
     contact_book = ContactBook()
     with Session(FILE_CONTACT_BOOK, contact_book) as session:
         while True:

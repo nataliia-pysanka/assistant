@@ -20,6 +20,9 @@ class Session:
 
 
 def add_note_command(*args):
+    """
+    Creating a new note command
+    """
     book = args[0]
     name = args[1]
     if name == '':
@@ -58,6 +61,9 @@ def add_note_command(*args):
 
 
 def add_tag_command(*args):
+    """
+    Adding a new tag command
+    """
     book = args[0]
     name = args[1]
     if name == '':
@@ -82,6 +88,9 @@ def add_tag_command(*args):
 
 
 def change_text_command(*args):
+    """
+    Editing note content command
+    """
     book = args[0]
     name = args[1]
     if name == '':
@@ -100,6 +109,9 @@ def change_text_command(*args):
 
 
 def show_single_command(*args):
+    """
+    Displaying one of the notes command
+    """
     book = args[0]
     name = args[1]
     if name == '':
@@ -115,6 +127,9 @@ def show_single_command(*args):
 
 
 def show_all_command(*args):
+    """
+    Displaying all of the commands
+    """
     book = args[0]
     if len(book) > 0:
         book.display_all()
@@ -124,6 +139,9 @@ def show_all_command(*args):
 
 
 def search_note_command(*args):
+    """
+    Searching the note by tag command
+    """
     book = args[0]
     tag = args[1]
     if tag is None:
@@ -135,6 +153,9 @@ def search_note_command(*args):
 
 
 def delete_note_command(*args):
+    """
+    Deleting the note byt it's name command
+    """
     book = args[0]
     name = args[1]
     if name == '':
@@ -150,6 +171,9 @@ def delete_note_command(*args):
 
 
 def back_command(*args):
+    """
+    Exit back to the menu command
+    """
     return 'back_command'
 
 
@@ -174,6 +198,9 @@ inp_vocab = {'add note':'If you use this option, add note heder,optional tag',
 
 
 def prompt_nicely():
+    """
+    Options hint for user input
+    """
     print('Please enter your command. Available options are:')
     for comand, prompt in inp_vocab.items():
         print("{:^20} {:<100}".format(comand, prompt))
@@ -181,6 +208,9 @@ def prompt_nicely():
 
 
 def parser(user_input: str):
+    """
+    Searching if the given command is available
+    """
     for command, input_ in commands.items():
         for elem in input_:
             if user_input.lower().startswith(elem.lower()):
@@ -192,6 +222,9 @@ def parser(user_input: str):
 
 
 def note_book_main():
+    """
+    User interaction processing
+    """
     note_book = NoteBook()
     with Session(FILE_NOTE_BOOK, note_book) as session:
         while True:
