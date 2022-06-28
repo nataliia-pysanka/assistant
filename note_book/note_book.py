@@ -106,6 +106,12 @@ class Note:
         rec += '.' * 120 + '\n'
         print(rec)
 
+    def has_tag(self, tag: str):
+        for tag_value in self.tags:
+            if tag_value.value == tag:
+                return True
+        return False
+
 
 class NoteBook(UserDict):
 
@@ -119,8 +125,8 @@ class NoteBook(UserDict):
 
     def search(self, tag: str):
         for note in self.data.values():
-            if tag in note.tag:
-                print(note)
+            if note.has_tag(tag):
+                note.print()
 
     def delete(self, note: Note):
         if note.name in self.data:
@@ -154,13 +160,12 @@ class NoteBook(UserDict):
 
 
 def fake_records(book: NoteBook):
-    for i in range(1):
+    for i in range(50):
         name = Name(fake.text(max_nb_chars=Name.max_name_length)[:-1])
         text = Text(fake.text(max_nb_chars=Text.max_text_length)[:-1])
         tags = []
-        for _ in range(randint(1, 5)):
-            tag = Tag(fake.text(
-                max_nb_chars=Tag.max_tag_length)[:-1].replace(' ', ''))
+        for _ in range(randint(1, 4)):
+            tag = Tag(tags_names[randint(1, len(tags_names)-1)])
             tags.append(tag)
 
         note = Note(name=name, text=text, tags=tags)
@@ -171,6 +176,14 @@ def fake_records(book: NoteBook):
 if __name__ == '__main__':
     fake = Faker()
 
+    tags_names = []
+    for i in range(10):
+        tags_names.append(fake.text(
+                max_nb_chars=Tag.max_tag_length)[:-1].replace(' ', '').lower())
+
     book = fake_records(NoteBook())
     book.display_all()
+    tag = input('input tag > ')
+    book.search(tag)
+    # book.display_all()
     # book.save('contactbook.json')
