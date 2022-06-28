@@ -86,11 +86,24 @@ def find_phone_command(*args):
 
 
 def change_phone_command(*args):
-    book, name = args
+    book = args[0]
+    name = args[1]
     try:
-        record = book.search(name)
+        old_num = args[2]
+    except IndexError:
+        print('You need to put old number')
+        input('Press Enter to back in menu >')
+
+    try:
+        new_num = args[3]
+    except IndexError:
+        print('You need to put new number')
+        input('Press Enter to back in menu >')
+
+    try:
+        record = book.edit_phone(name, old_num, new_num)
         if record:
-            record.edit_phone()
+            record.print()
         else:
             print('No information')
         input('Press Enter to back in menu >')

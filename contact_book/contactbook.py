@@ -136,10 +136,10 @@ class ContactBook(UserDict):
         rec = self.search(name)
         if not rec:
             return 'No record with this name'
-        rec.get_phone()
-        if rec.birthday:
-            delta = rec.birthday.days_to_birthday()
-            return delta
+        old_num_obj = rec.get_phone(old_num)
+        if old_num_obj:
+            old_num_obj.value = new_num
+            return rec
 
 # def fake_records(book: ContactBook):
 #     for i in range(50):
