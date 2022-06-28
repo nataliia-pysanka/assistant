@@ -12,6 +12,10 @@ from file_work.normalization import normalize
 
 
 def handle_files(file_name: Path, target_folder: Path):
+    """
+    Normalize file names from folder
+    :param file_name: Path, target_folder: Path
+    """
     target_folder.mkdir(exist_ok=True, parents=True)
     normalized_name = normalize(normalize(file_name.stem)) + file_name.suffix
     print(f'...replacing {file_name.name}')
@@ -19,6 +23,10 @@ def handle_files(file_name: Path, target_folder: Path):
 
 
 def handle_archives(file_name: Path, target_folder: Path):
+    """
+    Normalize file names from unpacked archive
+    :param file_name: Path, target_folder: Path
+    """
     target_folder.mkdir(exist_ok=True, parents=True)
     name = normalize(file_name.stem)
     normalized_name = name + file_name.suffix
@@ -37,6 +45,9 @@ def handle_folder(file_name: Path):
 
 
 def scan(folder: Path):
+    """
+    Parse and sort different format folders
+    """
     parser.scan_folder(folder)
     for file in parser.IMAGES:
         handle_files(file, folder / 'images')
@@ -56,6 +67,9 @@ def scan(folder: Path):
 
 
 def file_work_main():
+    """
+    Choosing target folder
+    """
     while True:
         folder = input('Input path to directory for sorting or exit to back in main menu > ')
         if folder == 'exit':

@@ -34,6 +34,9 @@ class Birthday(Field):
 
     @Field.value.setter
     def value(self, data):
+        """
+        Validate given Birthday format
+        """
         if not data:
             self._value = None
             return
@@ -49,6 +52,9 @@ class Birthday(Field):
             return self.value.strftime('%d.%m.%Y')
 
     def days_to_birthday(self):
+        """
+        Count number of days till specific person's Birthday
+        """
         if not self.value:
             return None
         day_now = datetime.now().date()
@@ -71,6 +77,9 @@ class Name(Field):
 
     @Field.value.setter
     def value(self, value: str):
+        """
+        Validate given name
+        """
         if not value:
             raise ValueError('Name is obligatory parameter')
         if not isinstance(value, str):
@@ -86,6 +95,9 @@ class Phone(Field):
 
     @Field.value.setter
     def value(self, value: str):
+        """
+        Validate and sanitize given phone number
+        """
         if not value:
             self._value = None
             return
@@ -119,6 +131,9 @@ class Email(Field):
 
     @Field.value.setter
     def value(self, value: str) -> None:
+        """
+        Validate given email
+        """
         if not value:
             self._value = None
             return
@@ -153,6 +168,10 @@ class Record:
                f'BIRTHDAY: {self.birthday}\n'
 
     def print(self):
+        """
+        Display all available records
+        :return: None
+        """
         rec = f'\t {"." * 30} \n'
         rec += '\t  {:<8} : {:<15}'.format('NAME', str(self.name.value)) + '\n'
 
@@ -197,6 +216,10 @@ class Record:
             return self.emails
 
     def add_email(self, new_email: Email):
+        """
+        Validate and add new email to the record
+        :param new_email: Email
+        """
         if not isinstance(new_email, Email):
             print('\t Number not added, Phone entered incorrectly \n')
             return
@@ -208,6 +231,10 @@ class Record:
         return new_email
 
     def add_phone(self, new_num: Phone):
+        """
+        Validate and add new phone to the record
+        :param new_num: Phone
+        """
         if not isinstance(new_num, Phone):
             print('\t Number not added, Phone entered incorrectly \n')
             return
@@ -219,6 +246,10 @@ class Record:
         return new_num
 
     def remove_phone(self, num: Phone):
+        """
+        Validate and remove phone from the record
+        :param num: Phone
+        """
         if not isinstance(num, Phone):
             print('\t Number not identified, Phone entered incorrectly \n')
             return
@@ -230,6 +261,10 @@ class Record:
         raise ValueError(f'\t Number {num.value} is not found \n')
 
     def edit_phone(self, num: Phone, new_num: Phone):
+        """
+        Validate and edit specific phone number from the record
+        :param num: Phone, new_num: Phone
+        """
         if not isinstance(num, Phone):
             print('\t Number not found, please enter correctly \n')
             return
@@ -241,21 +276,37 @@ class Record:
         raise ValueError(f'\t The number {num.value} is not found \n')
 
     def number_in_list(self, num: Phone):
+        """
+        Get phone number position for working with phone functions
+        :param num: Phone
+        """
         for number in self.nums:
             if num.value == number.value:
                 return number
 
     def email_in_list(self, mail: Email):
+        """
+        Get phone email position for working with email functions
+        :param mail: Email
+        """
         for email in self.emails:
             if mail.value == email.value:
                 return email
 
     def get_phone(self, num: str) -> Phone:
+        """
+        Get specific phone number
+        :param mail: Email
+        """
         for number in self.nums:
             if num == number.value:
                 return number
 
     def get_email(self, email: str) -> Email:
+        """
+        Get specific email
+        :param mail: Email
+        """
         for mail in self.emails:
             if email == mail.value:
                 return mail

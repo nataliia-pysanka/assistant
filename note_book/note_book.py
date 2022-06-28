@@ -30,6 +30,9 @@ class Tag(Field):
 
     @Field.value.setter
     def value(self, value: str) -> None:
+        """
+        Tag validation and character limit
+        """
         if not set(value).issubset(Tag.allowed_chars):
             raise ValueError(f"Incorrect characters in tag")
         elif len(value) > Tag.max_tag_length:
@@ -43,6 +46,9 @@ class Text(Field):
 
     @Field.value.setter
     def value(self, value: str):
+        """
+        Character limit for the note content
+        """
         if len(value) > 200:
             print(f"Text can be less than {Text.max_text_length} characters")
             return
@@ -54,6 +60,9 @@ class Name(Field):
 
     @Field.value.setter
     def value(self, new_value: str):
+        """
+        Character limit for the Name parameter
+        """
         if len(new_value) > Name.max_name_length:
             print(f"Name should contain under {Name.max_name_length} "
                   f"characters")
@@ -62,6 +71,9 @@ class Name(Field):
 
 
 class Note:
+    """
+    Class for instance Note
+    """
 
     def __init__(self, name: Name, text: Text = None, tags: List[Tag] = None):
         self.name = name
@@ -69,6 +81,10 @@ class Note:
         self.text = text
 
     def add_tag(self, new_tag: Tag):
+        """
+        Validate and add new tag to the notebook
+        :param new_tag: Tag
+        """
         if not isinstance(new_tag, Tag):
             raise TypeError('\t Tag can not be added \n')
         if new_tag.value not in self.tags:
@@ -76,12 +92,20 @@ class Note:
             return new_tag
 
     def add_text(self, new_txt: Text):
+        """
+        Validate and add new note content to the notebook
+        :param new_txt: Text
+        """
         if not isinstance(new_txt, Text):
             raise TypeError('\t Text can not be added \n')
         if not self.text:
             self.text = new_txt
 
     def delete_tag(self, tag: Tag):
+        """
+        Validate and remove specific tag from the notebook
+        :param new_tag: Tag
+        """
         if not isinstance(tag, Tag):
             raise TypeError('\t Incorrect type of tag \n')
         if tag in self.tags:
@@ -99,21 +123,36 @@ class Note:
 
 
 class NoteBook(UserDict):
-
+    """
+    Class-container for different note records
+    """
     def __init__(self):
         super().__init__()
         self.counter = 0
 
     def add(self, note: Note):
+        """
+        Add new record to the storage
+        :param note: Note
+        """
         key = note.name
         self[key] = note
 
     def search(self, tag: str):
+        """
+        Search note in storage by tag
+        :param tag: str
+        :return: note
+        """
         for note in self.data.values():
             if tag in note.tag:
                 print(note)
 
     def delete(self, note: Note):
+        """
+        Delete note by it's name from the storage
+        :param note: Note
+        """
         if note.name in self.data:
             del self.data[note.name]
 
