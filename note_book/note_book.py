@@ -20,7 +20,7 @@ class Field:
         self._value = value
 
     def __str__(self):
-        return f"{self.value}"
+        return f"{self._value}"
 
 
 class Tag(Field):
@@ -34,7 +34,6 @@ class Tag(Field):
             raise ValueError(f"Incorrect characters in tag")
         elif len(value) > Tag.max_tag_length:
             raise ValueError(f"Tags cant be less than {Tag.max_tag_length} characters")
-        # Field.value.fset(self, value)
         self._value = value
 
 
@@ -46,7 +45,6 @@ class Text(Field):
         if len(value) > 200:
             raise ValueError(f"Text can't be less than {Text.max_text_length} "
                              f"characters")
-        # Field.value.fset(self, value)
         self._value = value
 
 
@@ -60,17 +58,22 @@ class Name(Field):
                              f"{Name.max_name_length} characters")
         Field.value.fset(self, new_value)
 
+    def __str__(self):
+        return f'{self.value}'
+
 
 class Note:
 
     def __init__(self, name: Name, text: Text = None, tags: List[Tag] = None):
         self.name = name
-        self.tags = tags
-        self.text = text
+        self.tags = tags if tags else []
+        self.text = text if text else None
 
     def add_tag(self, new_tag: Tag):
         if not isinstance(new_tag, Tag):
             raise TypeError('\t Tag can not be added \n')
+        if len(self.tags) == 4:
+            raise ValueError('\t Too mach tags already \n')
         if new_tag.value not in self.tags:
             self.tags.append(new_tag)
             return new_tag
@@ -112,6 +115,36 @@ class Note:
                 return True
         return False
 
+    def serealize(self):
+        """
+        Transform data from object Note to the dictionary
+        :return: dict
+        """
+        dump = {}
+        if self.name:
+            dump['name'] = self.name.value
+        tags_for_dump = []
+        if self.tags:
+            for tag in self.tags:
+                tags_for_dump.append(tag.value)
+            dump['tags'] = tags_for_dump
+        if self.text:
+            dump['text'] = self.text.value
+        return dump
+
+    def deserealize(self, note):
+        """
+        Transform data from dictionary to object Note
+        :return: dict
+        """
+        if note['name']:
+            self.name.value = note['name']
+        if note['text']:
+            self.add_text(Text(note['text']))
+        if note['tags']:
+            for tag in note['tags']:
+                self.add_tag(Tag(tag))
+
 
 class NoteBook(UserDict):
 
@@ -123,6 +156,14 @@ class NoteBook(UserDict):
         key = note.name.value
         self.data[key] = note
         print(self.data.keys())
+
+    def add_tag(self, name: str, tag_obj: Tag):
+        note = self.search(name)
+        if note:
+            try:
+                note.add_tag(tag_obj)
+            except ValueError as err:
+                print(err)
 
     def search_tag(self, tag: str):
         for note in self.data.values():
@@ -162,23 +203,28 @@ class NoteBook(UserDict):
         else:
             print(f'There is no records for name {name}')
 
-    # def save(self, filename: str):
-    #
-    #     dump = []
-    #     for tag, note in self.data.items():
-    #         dump.append(note.serealize())
-    #     with open(filename, 'w', encoding='UTF-8') as f:
-    #         json.dump(dump, f)
-    #
-    # def load(self, filename: str):
-    #
-    #     self.clear()
-    #     with open(filename, 'r', encoding='UTF-8') as f:
-    #         dump = json.load(f)
-    #     for note in dump:
-    #         txt = Note()
-    #         txt.deserealize(note)
-    #         self.add(txt)
+    def save(self, filename: str):
+        dump = []
+        for name, note in self.data.items():
+            dump.append(note.serealize())
+        with open(filename, 'w', encoding='UTF-8') as f:
+            json.dump(dump, f)
+
+    def load(self, filename: str):
+        self.clear()
+        with open(filename, 'r', encoding='UTF-8') as f:
+            dump = json.load(f)
+        for note in dump:
+            txt = Note(name=Name('none'))
+            txt.deserealize(note)
+            self.add(txt)
+
+    def clear(self):
+        """
+        Clear all the data in the ContactBook
+        :return:
+        """
+        self.data = {}
 
 
 def fake_records(book: NoteBook):
@@ -203,9 +249,11 @@ if __name__ == '__main__':
         tags_names.append(fake.text(
                 max_nb_chars=Tag.max_tag_length)[:-1].replace(' ', '').lower())
 
-    book = fake_records(NoteBook())
+    # book = fake_records(NoteBook())
+    # book.display_all()
+    # book.save('notebook.json')
+    book = NoteBook()
+    book.load('notebook.json')
     book.display_all()
-    tag = input('input tag > ')
-    book.search(tag)
     # book.display_all()
     # book.save('contactbook.json')

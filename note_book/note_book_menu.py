@@ -54,7 +54,25 @@ def add_note_command(*args):
 
 
 def add_tag_command(*args):
-    return 'add_tag_command'
+    book = args[0]
+    name = args[1]
+    if name == '':
+        print('Name is obligatory parameter')
+        input('Press Enter to back in menu >')
+        return
+    try:
+        tag = args[2]
+    except IndexError:
+        print('No tag to add')
+        input('Press Enter to back in menu >')
+
+    try:
+        tag_obj = Tag(tag)
+    except ValueError as err:
+        print(err)
+
+    book.add_tag(name, tag_obj)
+    book.display(name)
 
 
 def change_text_command(*args):
