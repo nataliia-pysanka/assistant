@@ -1,8 +1,10 @@
 from collections import UserDict
 import json
-#from faker import Faker
+from faker import Faker
 from random import randint
 from typing import List
+from operator import itemgetter
+
 
 
 class Field:
@@ -250,11 +252,12 @@ class NoteBook(UserDict):
             del self.data[note.name]
 
     # def edit_note(self, name: Name, new_note: Note) -> str:
-    # """
-    # Edit note content notebook
-    # :param name: Name, new_note: Note
-    # """
+    #     """
+    #     Edit note content notebook
+    #     :param name: Name, new_note: Note
+    #     """
     #     self.data[name] = new_note
+    #
 
     # def find(self, param: str):
     # """
@@ -272,13 +275,18 @@ class NoteBook(UserDict):
     #             continue
     #     return notebook
 
-    # def sort_by_tag(self, tag: Tag):
-    # """
-    # Sort notes by tags
-    # :param tag: Tag
-    # """
-    #     notebook = NoteBook()
-    #     sorted_tags = sorted(notebook, key=itemgetter('tag'))
+    def sort_by_tag(self, tag: Tag):
+        """
+        Sort notes by tags
+        :param tag: Tag
+        """
+        notebook = NoteBook()
+        try:
+            sorted_tags = sorted(notebook, key=itemgetter('tag'))
+            print(sorted_tags)
+        except:
+            print(f'\t The tag {tag} is not found \n')
+
 
     def display_all(self):
         """
@@ -341,33 +349,33 @@ class NoteBook(UserDict):
         self.data = {}
 
 
-# def fake_records(book: NoteBook):
-#     for i in range(50):
-#         name = Name(fake.text(max_nb_chars=Name.max_name_length)[:-1])
-#         text = Text(fake.text(max_nb_chars=Text.max_text_length)[:-1])
-#         tags = []
-#         for _ in range(randint(1, 4)):
-#             tag = Tag(tags_names[randint(1, len(tags_names)-1)])
-#             tags.append(tag)
-#
-#         note = Note(name=name, text=text, tags=tags)
-#         book.add(note)
-#     return book
-#
-#
-# if __name__ == '__main__':
-#     fake = Faker()
-#
-#     tags_names = []
-#     for i in range(10):
-#         tags_names.append(fake.text(
-#                 max_nb_chars=Tag.max_tag_length)[:-1].replace(' ', '').lower())
-#
+def fake_records(book: NoteBook):
+    for i in range(50):
+        name = Name(fake.text(max_nb_chars=Name.max_name_length)[:-1])
+        text = Text(fake.text(max_nb_chars=Text.max_text_length)[:-1])
+        tags = []
+        for _ in range(randint(1, 4)):
+            tag = Tag(tags_names[randint(1, len(tags_names)-1)])
+            tags.append(tag)
+
+        note = Note(name=name, text=text, tags=tags)
+        book.add(note)
+    return book
+
+
+if __name__ == '__main__':
+    fake = Faker()
+
+    tags_names = []
+    for i in range(10):
+        tags_names.append(fake.text(
+                max_nb_chars=Tag.max_tag_length)[:-1].replace(' ', '').lower())
+
 #     # book = fake_records(NoteBook())
 #     # book.display_all()
 #     # book.save('notebook.json')
-#     book = NoteBook()
-#     book.load('notebook.json')
-#     book.display_all()
-#     # book.display_all()
+    book = NoteBook()
+    book.load('notebook.json')
+    book.sort_by_tag('hospital')
+    # book.display_all()
 #     # book.save('contactbook.json')
