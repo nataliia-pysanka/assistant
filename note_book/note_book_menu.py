@@ -1,16 +1,84 @@
+from note_book.note_book import Note, NoteBook, Text, Tag, Name
+from pathlib import Path
+
+FILE_NOTE_BOOK = 'notebook.json'
+
+
+class Session:
+    def __init__(self, file, book: NoteBook):
+        self.file = Path(file)
+        self.book = book
+
+    def __enter__(self):
+        if self.file.exists():
+            pass
+            # self.book.load(str(self.file))
+
+    def __exit__(self, exception_type, exception_value, traceback):
+        pass
+        # self.book.save(str(self.file))
+
+
 def add_note_command(*args):
     """
     Creating a new note command
     """
-    print(*args)
-    return 'add_note_command'
+    book = args[0]
+    name = args[1]
+    if name == '':
+        print('Name is obligatory parameter')
+        input('Press Enter to back in menu >')
+        return
+    try:
+        name_obj = Name(name)
+    except ValueError as err:
+        print(err)
+        input('Press Enter to back in menu >')
+        return
+
+    tags = []
+    for arg in args[2:]:
+        try:
+            tags.append(Tag(arg))
+        except ValueError as err:
+            print(err)
+
+    text = input(f'Input text (max {Text.max_text_length} symbols) > ')
+    try:
+        text_obj = Text(text)
+    except ValueError as err:
+        print(err)
+        text = None
+
+    note = Note(name=name_obj, text=text_obj, tags=tags)
+    book.add(note)
+    book.display(name)
+    input('Press Enter to back in menu >')
 
 
 def add_tag_command(*args):
     """
     Adding a new tag command
     """
-    return 'add_tag_command'
+    book = args[0]
+    name = args[1]
+    if name == '':
+        print('Name is obligatory parameter')
+        input('Press Enter to back in menu >')
+        return
+    try:
+        tag = args[2]
+    except IndexError:
+        print('No tag to add')
+        input('Press Enter to back in menu >')
+
+    try:
+        tag_obj = Tag(tag)
+    except ValueError as err:
+        print(err)
+
+    book.add_tag(name, tag_obj)
+    book.display(name)
 
 
 def change_text_command(*args):
@@ -49,7 +117,9 @@ def delete_note_command(*args):
 
 
 def back_command(*args):
-    """Exit back to the menu command"""
+    """
+    Exit back to the menu command
+    """
     return 'back_command'
 
 
@@ -72,6 +142,7 @@ inp_vocab = {'add note':'If you use this option, add note heder,optional tag',
             'main menu':'If you use this option, you will be sent to main menu'
             }
 
+
 def prompt_nicely():
     """
     Options hint for user input
@@ -93,17 +164,22 @@ def parser(user_input: str):
                 return command, data
     if user_input not in commands.items():
         print('You have typed wrong command. Please try again\n')
-        note_book_main()
+        return None
 
 
 def note_book_main():
     """
     User interaction processing
     """
-    while True:
-        user_input = prompt_nicely()
-        command, data = parser(user_input)
-        print(command(*data))
-        if command is back_command:
-            return
+    note_book = NoteBook()
+    with Session(FILE_NOTE_BOOK, note_book) as session:
+        while True:
+            user_input = prompt_nicely()
+            parsered = parser(user_input)
+            if not parsered:
+                continue
+            command, data = parsered
+            if command is back_command:
+                return
+            print(command(note_book, *data))
 

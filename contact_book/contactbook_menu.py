@@ -69,6 +69,7 @@ def add_command(*args):
     except ValueError as err:
         print(err)
         email_obj = None
+
     rec = Record(name=name_obj, num=num_obj,
                  birthday=birth_obj, email=email_obj)
 
@@ -148,7 +149,7 @@ def change_phone_command(*args):
         print(err)
 
 
-def back_command(*args):
+def back_command():
     """
     CExit back to the menu command
     """
@@ -221,7 +222,7 @@ def parser(user_input: str):
                 return command, data
     if user_input not in commands.items():
         print('You have typed wrong command. Please try again\n')
-        contact_book_main()
+        return None
 
 
 def contact_book_main():
@@ -232,10 +233,13 @@ def contact_book_main():
     with Session(FILE_CONTACT_BOOK, contact_book) as session:
         while True:
             user_input = prompt_nicely()
-            command, data = parser(user_input)
-            print(command(contact_book, *data))
+            parsered = parser(user_input)
+            if not parsered:
+                continue
+            command, data = parsered
             if command is back_command:
                 return
+            print(command(contact_book, *data))
 
 
 if __name__ == '__main__':
