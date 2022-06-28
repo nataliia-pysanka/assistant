@@ -227,7 +227,7 @@ class NoteBook(UserDict):
         with open(filename, 'r', encoding='UTF-8') as f:
             dump = json.load(f)
         for note in dump:
-            txt = Note(name=Name('none'))
+            txt = Note(name=Name('temp'))
             txt.deserealize(note)
             self.add(txt)
 

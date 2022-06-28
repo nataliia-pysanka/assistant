@@ -15,12 +15,12 @@ class Session:
 
     def __enter__(self):
         if self.file.exists():
-            pass
-            # self.book.load(str(self.file))
+            # pass
+            self.book.load(str(self.file))
 
     def __exit__(self, exception_type, exception_value, traceback):
-        pass
-        # self.book.save(str(self.file))
+        # pass
+        self.book.save(str(self.file))
 
 
 def add_command(*args):
@@ -93,13 +93,13 @@ def change_phone_command(*args):
     except IndexError:
         print('You need to put old number')
         input('Press Enter to back in menu >')
-
+        return
     try:
         new_num = args[3]
     except IndexError:
         print('You need to put new number')
         input('Press Enter to back in menu >')
-
+        return
     try:
         record = book.edit_phone(name, old_num, new_num)
         if record:

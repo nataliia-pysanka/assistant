@@ -1,7 +1,7 @@
 from collections import UserDict
-from contact_book.record import Record
+from contact_book.record import Record, Name
 import json
-#from faker import Faker
+from faker import Faker
 from datetime import datetime
 from random import randint
 
@@ -111,7 +111,7 @@ class ContactBook(UserDict):
         with open(file_name, 'r', encoding='UTF-8') as file:
             dump = json.load(file)
         for record in dump:
-            rec = Record()
+            rec = Record(name=Name('temp'))
             rec.deserealize(record)
             self.add(rec)
 
