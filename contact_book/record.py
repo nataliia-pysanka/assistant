@@ -87,7 +87,7 @@ class Phone(Field):
             raise ValueError("Value Error, phone should contain numbers")
 
         if len(num) not in (10, 12):
-            raise ValueError("Value Error, operator not valid")
+            raise ValueError("Value Error, phone length should be 12 symbols")
 
         operators = {"067", "068", "096", "097", "098",
                      "050", "066", "095", "099", "063", "073", "093"}

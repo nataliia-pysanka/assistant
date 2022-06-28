@@ -1,3 +1,5 @@
+from multiprocessing.sharedctypes import Value
+from pyparsing import nums
 from contact_book.contactbook import ContactBook
 from contact_book.record import Record, Name, Phone, Email, Birthday
 from pathlib import Path
@@ -22,12 +24,22 @@ class Session:
 
 
 def add_command(*args):
-    book, name = args
-    # just for testing !!!!
-    rec = Record(name=Name(name), num=Phone('0669127473'),
-                 email=Email('go@it.com'), birthday=Birthday('30.6.2000'))
-    # rec = Record(name=Name(name), num=Phone('0669127473'),
-    #              email=Email('go@it.com'))
+
+    book = args[0]
+    name = args[1]
+    try:
+        nums = args[2]
+    except KeyError:
+        nums = None
+    try:
+        birthday = args[3]
+    except KeyError:
+        birthday = None
+    try:
+        emails =args[4]
+    except KeyError:
+        emails = None
+    rec = Record(name=Name(name), num=Phone(nums), birthday=Birthday(birthday), email=Email(emails)) ###Уточнить
     book.add(rec)
     book.display(name)
     input('Press Enter to back in menu >')
@@ -117,9 +129,10 @@ inp_vocab_2 = {
 
 
 def prompt_nicely():
-    print('Please enter your command. Available options are:')
+    print('Please enter your command. Available options are:\n')
     for comand, prompt in inp_vocab_2.items():
-        print("{:^18} {:<100}".format(comand, prompt))
+        if comand:
+            print("{:^18} {:<100}".format(comand, prompt))
     return input('>>>')
 
 
@@ -129,6 +142,9 @@ def parser(user_input: str):
             if user_input.lower().startswith(elem.lower()):
                 data = user_input[len(elem):].strip().split(' ')
                 return command, data
+    if user_input not in commands.items():
+        print('You have typed wrong command. Please try again\n')
+        contact_book_main()
 
 
 def contact_book_main():
