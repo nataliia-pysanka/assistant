@@ -24,22 +24,29 @@ class Session:
 
 
 def add_command(*args):
-
     book = args[0]
     name = args[1]
+    if name == '':
+        print('Name is obligatory parameter')
+        input('Press Enter to back in menu >')
+        return
+
     try:
-        nums = args[2]
-    except KeyError:
+        nums = None if args[2] == '-' else args[2]
+    except IndexError:
         nums = None
     try:
-        birthday = args[3]
-    except KeyError:
-        birthday = None
+        birthday = '' if args[3] == '-' else args[3]
+    except IndexError:
+        birthday = ''
     try:
-        emails =args[4]
-    except KeyError:
+        emails = None if args[4] == '-' else args[4]
+    except IndexError:
         emails = None
-    rec = Record(name=Name(name), num=Phone(nums), birthday=Birthday(birthday), email=Email(emails)) ###Уточнить
+
+    rec = Record(name=Name(name), num=Phone(nums),
+                 birthday=Birthday(birthday), email=Email(emails))
+
     book.add(rec)
     book.display(name)
     input('Press Enter to back in menu >')
@@ -66,11 +73,42 @@ def days_to_birthday(*args):
 
 
 def find_phone_command(*args):
-    return 'find_phone_command'
+    book, name = args
+    try:
+        record = book.search(name)
+        if record:
+            record.print()
+        else:
+            print('No information')
+        input('Press Enter to back in menu >')
+    except ValueError as err:
+        print(err)
 
 
 def change_phone_command(*args):
-    return 'change_phone_command'
+    book = args[0]
+    name = args[1]
+    try:
+        old_num = args[2]
+    except IndexError:
+        print('You need to put old number')
+        input('Press Enter to back in menu >')
+
+    try:
+        new_num = args[3]
+    except IndexError:
+        print('You need to put new number')
+        input('Press Enter to back in menu >')
+
+    try:
+        record = book.edit_phone(name, old_num, new_num)
+        if record:
+            record.print()
+        else:
+            print('No information')
+        input('Press Enter to back in menu >')
+    except ValueError as err:
+        print(err)
 
 
 def back_command(*args):
@@ -79,22 +117,6 @@ def back_command(*args):
 
 def change_birthday_command(*args):
     return 'change_birthday_command'
-
-# def days_to_birthday(*args):
-#     if not record.birthday:
-#         return None
-#     day_now = datetime.now().date()
-#     current_year = record.param.replace(year=day_now.year)
-#     if current_year > day_now:
-#         delta = current_year - day_now
-#         print(f'You have left {delta.days} to next birthday!')
-#         return delta
-#     else:
-#         next_b_day = current_year.replace(year=day_now.year + 1)
-#         delta = next_b_day - day_now
-#         print(f'You have left {delta.days} to next birthday!')
-#         return delta
-
 
 
 def change_name_command(*args):

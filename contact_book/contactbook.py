@@ -77,6 +77,8 @@ class ContactBook(UserDict):
         rec = self.search(name)
         if rec:
             rec.print()
+        else:
+            print(f'There is no records for name {name}')
 
     def display_all(self):
         """
@@ -130,6 +132,14 @@ class ContactBook(UserDict):
             delta = rec.birthday.days_to_birthday()
             return delta
 
+    def edit_phone(self, name: str, old_num: str, new_num: str):
+        rec = self.search(name)
+        if not rec:
+            return 'No record with this name'
+        old_num_obj = rec.get_phone(old_num)
+        if old_num_obj:
+            old_num_obj.value = new_num
+            return rec
 
 # def fake_records(book: ContactBook):
 #     for i in range(50):
@@ -139,7 +149,7 @@ class ContactBook(UserDict):
 #         phone = str(fake.random_number(digits=randint(10, 15)))
 #         rec = Record(name=name, num=phone, birthday=date_birth)
 #         book.add(rec)
-#     return book
+# #     return book
 
 
 # if __name__ == '__main__':

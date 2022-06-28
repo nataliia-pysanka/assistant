@@ -15,6 +15,9 @@ class Field:
 
     @value.setter
     def value(self, value):
+        if not value:
+            self._value = None
+            return
         self._value = value
 
     def __str__(self):
@@ -31,6 +34,9 @@ class Birthday(Field):
 
     @Field.value.setter
     def value(self, data):
+        if not data:
+            self._value = None
+            return
         try:
             self._value = datetime.strptime(data, '%d.%m.%Y').date()
         except ValueError:
@@ -65,6 +71,8 @@ class Name(Field):
 
     @Field.value.setter
     def value(self, value: str):
+        if not value:
+            raise ValueError('Name is obligatory parameter')
         if not isinstance(value, str):
             raise ValueError("Name should be a string")
         self._value = value
@@ -78,6 +86,9 @@ class Phone(Field):
 
     @Field.value.setter
     def value(self, value: str):
+        if not value:
+            self._value = None
+            return
         num = (value.strip().removeprefix('+')
                .replace("(", '')
                .replace(")", '')
@@ -108,6 +119,9 @@ class Email(Field):
 
     @Field.value.setter
     def value(self, value: str) -> None:
+        if not value:
+            self._value = None
+            return
         pattern = r"[a-zA-Z]+[a-zA-Z0-9._]+@[a-z]+\.[a-z]{2,}"
         if re.match(pattern, value):
             Field.value.fset(self, value)
@@ -141,7 +155,7 @@ class Record:
         rec = f'\t {"." * 30} \n'
         rec += '\t  {:<8} : {:<15}'.format('NAME', str(self.name.value)) + '\n'
 
-        if self.birthday:
+        if self.birthday.value:
             birth = str(self.birthday.value)
         else:
             birth = ''
@@ -149,14 +163,16 @@ class Record:
 
         indx = 1
         for phone in self.nums:
+            num = str(phone.value) if phone.value else ''
             rec += '\t  {:<8} : {:<15}'.format(f'NUMBER {indx}',
-                                               str(phone.value)) + '\n'
+                                               num) + '\n'
             indx += 1
 
         indx = 1
         for email in self.emails:
+            mail = str(email.value) if email.value else ''
             rec += '\t  {:<8} : {:<15}'.format(f'EMAIL {indx}',
-                                               str(email)) + '\n'
+                                               mail) + '\n'
             indx += 1
         rec += f'\t {"." * 30} \n'
         print(rec)
