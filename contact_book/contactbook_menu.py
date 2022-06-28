@@ -175,9 +175,8 @@ def change_email_command(*args):
         input('Press Enter to back in menu >')
 
     try:
-        record = book.get(name)
+        record = book.edit_email(name, old_email, new_email)
         if record:
-            record.edit_email(Email(old_email), Email(new_email))
             record.print()
         else:
             print('No information')
@@ -223,10 +222,9 @@ def parser(user_input: str):
             if user_input.lower().startswith(elem.lower()):
                 data = user_input[len(elem):].strip().split(' ')
                 return command, data
-    return None, None 
-    # if user_input not in commands.items():
-    #     print('You have typed wrong command. Please try again\n')
-    #     contact_book_main()
+    if user_input not in commands.items():
+        print('You have typed wrong command. Please try again\n')
+        contact_book_main()
 
 
 def contact_book_main():
@@ -235,9 +233,6 @@ def contact_book_main():
         while True:
             user_input = prompt_nicely()
             command, data = parser(user_input)
-            if not command:
-                print('You have typed wrong command. Please try again\n')
-                continue
             print(command(contact_book, *data))
             if command is back_command:
                 return

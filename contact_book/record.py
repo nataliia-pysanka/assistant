@@ -295,22 +295,14 @@ class Record:
         mail_in_list = self.email_in_list(email)
         if mail_in_list:
             mail_in_list.value = new_email.value
-            return mail_in_list
+            return
         raise ValueError(f'\t Email {email.value} is not found \n')
 
 
 
-if __name__ == '__main__':
-    e = Email('asd@asd.com')
-    e2 = Email('wwwwwww@asd.com')
-    rec = Record(name='Kim', email=e)
-    call = rec.edit_email(e, e2)
-    print(type(call))
-    print(call)
 
-
-
-
+# if __name__ == "__main__":
+#     e = Email('first@go.com')
 #     print(e)
 #     rec = Record(name='Kim', email=e)
 #     rec.print()
@@ -321,6 +313,7 @@ if __name__ == '__main__':
 #     except ValueError as err:
 #         print(err)
 #     print(rec)
+#     rec.add_phone(Phone('066-765-43-36'))
 #     rec.add_phone(Phone('+38(095)654-34-23'))
 #     rec.print()
     # rec.add_email(Email('hello@ukr.net'))
