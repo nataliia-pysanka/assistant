@@ -67,11 +67,11 @@ class Name(Field):
         return self.value
 
 
-class Note(UserDict):
+class Note:
 
     def __init__(self, name: Name, tag: Tag = None, txt: Text = None) -> None:
         self.tags = []
-        self.data[name] = txt
+        self.text = txt
         if tag:
             self.tags.append(tag)
 
@@ -79,7 +79,7 @@ class Note(UserDict):
         if not isinstance(new_tag, Tag):
             print('\t Tag can not be added \n')
             return
-        if new_tag.value not in [t.value for t in self.tags]:
+        if new_tag.value not in self.tags:
             self.tags.append(new_tag)
             return new_tag
 
@@ -87,8 +87,8 @@ class Note(UserDict):
         if not isinstance(new_txt, Text):
             print('\t Tag can not be added \n')
             return
-        if new_txt.value not in [t.value for t in self.tags]:
-            self.notes.append(new_txt)
+        if new_txt.value not in self.data:
+            self.data.update(new_txt)
             return new_txt
 
     def delete_note(self, arg):
@@ -174,9 +174,9 @@ class NoteBook(UserDict):
         result = "\n".join([str(rec) for rec in self.data.values()])
         return result
 
-notebook = NoteBook()
+#notebook = NoteBook()
 
-notebook.load()
+#notebook.load()
 
 def show_all():
     nb = str(notebook)
@@ -194,3 +194,7 @@ def change_note():
         notebook.edit_note(choose_note, Note(Name(choose_note), Note(new_txt)))
         notebook.save()
         print("Note changed")
+
+if __name__ == '__main__':
+    note = Note(name = Name('something'), tag = Tag('dtt'), txt = Text('ttt gggg'))
+
