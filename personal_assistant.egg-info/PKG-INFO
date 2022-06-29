@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: personal-assistant
-Version: 1.0.0
+Version: 1.0.1
 Summary: Package to assist your contacts, notes and files
 Home-page: https://github.com/nataliia-pysanka/assistant
 Author: group-8
@@ -29,7 +29,7 @@ The assistant could:
 This is a package to make your folder clear and structured. 
 You just need to install this package with command:
 ```
-https://test.pypi.org/project/clean-folder-superb/0.0.1/
+https://test.pypi.org/project/personal-assistant/1.0.0/
 ```
 or from folder with setup.py file:
 ```

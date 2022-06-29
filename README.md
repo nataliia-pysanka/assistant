@@ -14,9 +14,11 @@ The assistant could:
 * sort files in the specific directory by the categories
 
 This is a package to make your folder clear and structured. 
+Worked under Python 3.10.5
+
 You just need to install this package with command:
 ```
-https://test.pypi.org/project/personal-assistant/1.0.0/
+https://test.pypi.org/project/personal-assistant/1.0.1/
 ```
 or from folder with setup.py file:
 ```

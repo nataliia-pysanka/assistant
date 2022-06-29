@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="personal_assistant",
-    version="1.0.0",
+    version="1.0.1",
     author="group-8",
     author_email="pysankanataliia@gmail.com",
     description="Package to assist your contacts, notes and files",
@@ -18,7 +18,7 @@ setup(
         "Operating System :: OS Independent",
     ],
     packages=find_namespace_packages(),
-    install_requires=['pathlib'],
+    install_requires=['pathlib==1.0.1'],
     entry_points={'console_scripts': [
         'assistant=app.main_menu:initial_main'
     ]}
