@@ -175,7 +175,7 @@ class Record:
         rec = f'\t {"." * 30} \n'
         rec += '\t  {:<8} : {:<15}'.format('NAME', str(self.name.value)) + '\n'
 
-        if self.birthday.value:
+        if self.birthday:
             birth = str(self.birthday.value)
         else:
             birth = ''
@@ -284,6 +284,7 @@ class Record:
             if num.value == number.value:
                 return number
 
+
     def email_in_list(self, mail: Email):
         """
         Get phone email position for working with email functions
@@ -292,6 +293,7 @@ class Record:
         for email in self.emails:
             if mail.value == email.value:
                 return email
+
 
     def get_phone(self, num: str) -> Phone:
         """
@@ -317,8 +319,23 @@ class Record:
         :return: dict
         """
         dump = {}
-        for key, value in self.__dict__.items():
-            dump.update({key: value})
+        if self.name:
+            dump['name'] = self.name.value
+
+        if self.birthday:
+            dump['birthday'] = self.birthday.value_as_str
+
+        phone_for_dump = []
+        if self.nums:
+            for num in self.nums:
+                phone_for_dump.append(num.value)
+            dump['nums'] = phone_for_dump
+
+        email_for_dump = []
+        if self.emails:
+            for mail in self.emails:
+                email_for_dump.append(mail.value)
+            dump['emails'] = email_for_dump
         return dump
 
     def deserealize(self, record):
@@ -326,11 +343,46 @@ class Record:
         Transform data from dictionary to object Record
         :return: dict
         """
-        for key, value in record.items():
-            self.__dict__[key] = value
+        if record['name']:
+            self.name.value = record['name']
+
+        if record.get('birthday'):
+            self.birthday = Birthday(record['birthday'])
+
+        if record.get('nums'):
+            for num in record['nums']:
+                self.add_phone(Phone(num))
+
+        if record.get('emails'):
+            for email in record['emails']:
+                self.add_email(Email(email))
 
     def __repr__(self):
         return f'{", ".join([p.value for p in self.nums])}'
+
+    def edit_birthday(self, new_birthday: str):
+        self.birthday.value = new_birthday
+
+    def edit_name(self, new_name: str):
+        self.name.value = new_name
+
+    def email_in_list(self, mail: Email):
+        for email in self.emails:
+            if mail.value == email.value:
+                return email
+
+    def edit_email(self, email: Email, new_email: Email):
+        if not isinstance(email, Email):
+            print('\t Email not found, please enter correctly \n')
+            return
+
+        mail_in_list = self.email_in_list(email)
+        if mail_in_list:
+            mail_in_list.value = new_email.value
+            return
+        raise ValueError(f'\t Email {email.value} is not found \n')
+
+
 
 
 # if __name__ == "__main__":

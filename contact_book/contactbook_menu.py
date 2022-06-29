@@ -15,12 +15,12 @@ class Session:
 
     def __enter__(self):
         if self.file.exists():
-            pass
-            # self.book.load(str(self.file))
+            # pass
+            self.book.load(str(self.file))
 
     def __exit__(self, exception_type, exception_value, traceback):
-        pass
-        # self.book.save(str(self.file))
+        # pass
+        self.book.save(str(self.file))
 
 
 def add_command(*args):
@@ -131,13 +131,13 @@ def change_phone_command(*args):
     except IndexError:
         print('You need to put old number')
         input('Press Enter to back in menu >')
-
+        return
     try:
         new_num = args[3]
     except IndexError:
         print('You need to put new number')
         input('Press Enter to back in menu >')
-
+        return
     try:
         record = book.edit_phone(name, old_num, new_num)
         if record:
@@ -159,22 +159,80 @@ def back_command():
 def change_birthday_command(*args):
     """
     Change specific person's birth date command
-    """
-    return 'change_birthday_command'
+    """ 
+    book = args[0]
+    name = args[1]
+    try:
+        new_birthday = args[2]
+    except IndexError:
+        print('You need to put new birthday date')
+        input('Press Enter to back in menu >')
+        return
+
+    try:
+        book.edit_birthday(name, new_birthday)
+        record = book.search(name)
+        if record:
+            record.print()
+        else:
+            print('No information')
+        input('Press Enter to back in menu >')
+    except ValueError as err:
+        print(err)
 
 
 def change_name_command(*args):
     """
     Change specific name command
     """
-    return 'change_name_command'
+    book = args[0]
+    name = args[1]
+    try:
+        new_name = args[2]
+    except IndexError:
+        print('You need to put new name')
+        input('Press Enter to back in menu >')
+        return
+
+    try:
+        book.edit_name(name, new_name)
+        record = book.search(name)
+        if record:
+            record.print()
+        else:
+            print('No information')
+        input('Press Enter to back in menu >')
+    except ValueError as err:
+        print(err)
 
 
 def change_email_command(*args):
     """
-    Change specific email command
+        Change specific email command
     """
-    return 'change_email_command'
+    book = args[0]
+    name = args[1]
+    try:
+        old_email = args[2]
+    except IndexError:
+        print('You need to put old email')
+        input('Press Enter to back in menu >')
+
+    try:
+        new_email = args[3]
+    except IndexError:
+        print('You need to put new email')
+        input('Press Enter to back in menu >')
+
+    try:
+        record = book.edit_email(name, old_email, new_email)
+        if record:
+            record.print()
+        else:
+            print('No information')
+        input('Press Enter to back in menu >')
+    except ValueError as err:
+        print(err)
 
 
 commands = {add_command: ['add'],
@@ -184,7 +242,7 @@ commands = {add_command: ['add'],
             change_phone_command: ['change phone'],
             back_command: ['main menu'],
             # optional section
-            # change_birthday_command: ['change birthday'],
+            change_birthday_command: ['change birthday'],
             change_name_command: ['change name'],
             change_email_command: ['change email']}
 inp_vocab_2 = {

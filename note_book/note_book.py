@@ -96,14 +96,16 @@ class Note:
             self.tags.append(new_tag)
             return new_tag
 
-    def add_text(self, new_txt: Text):
+    def change_text(self, new_txt: Text):
         """
         Validate and add new note content to the notebook
         :param new_txt: Text
         """
         if not isinstance(new_txt, Text):
             raise TypeError('\t Text can not be added \n')
-        if not self.text:
+        if self.text:
+            self.text.value = new_txt.value
+        else:
             self.text = new_txt
 
     def delete_tag(self, tag: Tag):
@@ -118,42 +120,6 @@ class Note:
         else:
             print(f'\t The tag {tag} is not found \n')
 
-    # def delete_note(self, arg):
-    # """
-    # Delete specific note cand validation
-    # """
-    #     notebook = NoteBook()
-    #     if arg in notebook.data.keys():
-    #         del notebook.data[arg]
-    #         print(f'Note deleted')
-    #         notebook.save()
-    #     else:
-    #         print("Couldn't find the note)\n")
-
-    # def edit_note(self, text: Text, new_txt: Text):
-    # """
-    # Change note content and validation
-    # :param text: Text, new_txt: Text
-    # """
-    #     if not isinstance(text, Text):
-    #         print('\t Note not found, please enter correctly \n')
-    #         return
-
-    #     note_in_list = self.number_in_list(text)
-    #     if note_in_list:
-    #         note_in_list.value = new_txt.value
-    #         return
-    #     raise ValueError('\t The note was not found \n')
-
-    # def note_in_list(self, text: Text):
-    # """
-    # Get note position for edit_note function
-    # :param text: Text
-    # """
-    #     for pl in self.text:
-    #         if text.value == pl.value:
-    #             return pl
-
     def __str__(self):
         return f'Note: {self.name.value}'
 
@@ -166,7 +132,7 @@ class Note:
         rec += '\t  {:<8} : {:<15}'.format('NAME', str(self.name.value)) + '\n'
 
         tags = ' '.join(str(tag.value) for tag in self.tags)
-        rec += '\t  {:<8} : {:<15}'.format(f'TAGS', tags + '\n')
+        rec += '\t  {:<8} : {:<15}'.format(f'TAGS', tags) + '\n'
 
         rec += '.' * 120 + '\n'
         rec += '{:^120}'.format(self.text.value)
@@ -209,7 +175,7 @@ class Note:
         if note['name']:
             self.name.value = note['name']
         if note['text']:
-            self.add_text(Text(note['text']))
+            self.change_text(Text(note['text']))
         if note['tags']:
             for tag in note['tags']:
                 self.add_tag(Tag(tag))
@@ -223,7 +189,7 @@ class NoteBook(UserDict):
     def __init__(self):
         super().__init__()
         self.counter = 0
-
+        self.names = []
 
     def add(self, note: Note):
         """
@@ -232,7 +198,7 @@ class NoteBook(UserDict):
         """
         key = note.name.value
         self.data[key] = note
-        print(self.data.keys())
+        self.names.append(key)
 
     def add_tag(self, name: str, tag_obj: Tag):
         note = self.search(name)
@@ -242,22 +208,23 @@ class NoteBook(UserDict):
             except ValueError as err:
                 print(err)
 
+    def add_text(self, name: str, text: Text):
+        note = self.search(name)
+        if note:
+            try:
+                note.change_text(text)
+            except ValueError as err:
+                print(err)
+
     def search_tag(self, tag: str):
         for note in self.data.values():
             if note.has_tag(tag):
                 note.print()
 
     def delete(self, note: Note):
-        if note.name in self.data:
-            del self.data[note.name]
-
-    # def edit_note(self, name: Name, new_note: Note) -> str:
-    #     """
-    #     Edit note content notebook
-    #     :param name: Name, new_note: Note
-    #     """
-    #     self.data[name] = new_note
-    #
+        if note.name.value in self.names:
+            del self.data[note.name.value]
+            self.names.remove(note.name.value)
 
     # def find(self, param: str):
     # """
@@ -293,7 +260,7 @@ class NoteBook(UserDict):
         Display all  records
         :return: None
         """
-        for record in self.data.values():
+        for record in self:
             record.print()
 
     def search(self, name: str) -> Note:
@@ -335,9 +302,12 @@ class NoteBook(UserDict):
         """
         self.clear()
         with open(filename, 'r', encoding='UTF-8') as f:
-            dump = json.load(f)
+            try:
+                dump = json.load(f)
+            except ValueError:
+                return
         for note in dump:
-            txt = Note(name=Name('none'))
+            txt = Note(name=Name('temp'))
             txt.deserealize(note)
             self.add(txt)
 
@@ -347,6 +317,20 @@ class NoteBook(UserDict):
         :return:
         """
         self.data = {}
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        while self.counter < len(self.names):
+            if self.counter > 0 and self.counter % 3 == 0:
+                input('Press Enter to continue >')
+            index = self.counter
+            self.counter += 1
+            return self.data[self.names[index]]
+
+        self.counter = 0
+        raise StopIteration
 
 
 def fake_records(book: NoteBook):
