@@ -201,6 +201,10 @@ class NoteBook(UserDict):
         self.names.append(key)
 
     def add_tag(self, name: str, tag_obj: Tag):
+        """
+        Validate and add tags
+        :param name: str, tag_obj: Tag
+        """
         note = self.search(name)
         if note:
             try:
@@ -209,6 +213,10 @@ class NoteBook(UserDict):
                 print(err)
 
     def add_text(self, name: str, text: Text):
+        """
+        Validate and ddd note content
+        :param name: str, text: Text
+        """
         note = self.search(name)
         if note:
             try:
@@ -217,11 +225,19 @@ class NoteBook(UserDict):
                 print(err)
 
     def search_tag(self, tag: str):
+        """
+        Validate and find notes by tag
+        :param tag: str
+        """
         for note in self.data.values():
             if note.has_tag(tag):
                 note.print()
 
     def delete(self, note: Note):
+        """
+        Validate and delete note
+        :param note: Note
+        """
         if note.name.value in self.names:
             del self.data[note.name.value]
             self.names.remove(note.name.value)

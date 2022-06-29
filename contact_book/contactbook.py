@@ -46,12 +46,20 @@ class ContactBook(UserDict):
         return False
 
     def edit_birthday(self, name: str, new_birthday: str):
+        """
+        Change specific person's Birthday info
+        :param name: str, new_birthday: str
+        """
         rec = self.search(name)
         if not rec:
             return 'No record with this name'
         rec.edit_birthday(new_birthday)
 
     def edit_name(self, name: str, new_name: str):
+        """
+         Edit name information
+         :param name: str, new_name: str
+         """
         rec = self.search(name)
         if not rec:
             return 'No record with this name'
@@ -165,6 +173,10 @@ class ContactBook(UserDict):
             return rec
 
     def edit_email(self, name: str, old_email:str, new_email: str):
+        """
+         Edit email information
+         :param name: str, old_email:str, new_email: str
+         """
         rec = self.search(name)
         if not rec:
             return 'No record with this name'
