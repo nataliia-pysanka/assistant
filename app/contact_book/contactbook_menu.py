@@ -1,8 +1,12 @@
 from app.contact_book.contactbook import ContactBook
 from app.contact_book.record import Record, Name, Phone, Email, Birthday
 from pathlib import Path
+import pkg_resources
+from datetime import datetime
 
-FILE_CONTACT_BOOK = 'app/contactbook.json'
+FILE_CONTACT_BOOK = pkg_resources.resource_filename(__name__,
+                                                    'contactbook.json')
+# FILE_CONTACT_BOOK = ('app/contactbook.json')
 
 
 class Session:
@@ -105,9 +109,12 @@ def find_phone_command(*args):
     """
     book, name = args
     try:
-        record = book.search(name)
-        if record:
-            record.print()
+        # record = book.search(name)
+        # if record:
+        #     record.print()
+        contacts: ContactBook = book.search_partly(name)
+        if contacts:
+            contacts.display_all()
         else:
             print('No information')
         input('Press Enter to back in menu >')
@@ -230,9 +237,30 @@ def change_email_command(*args):
         print(err)
 
 
+def who_born(*args):
+    """
+        Search contacts that have birthday in specific day
+    """
+    book = args[0]
+    try:
+        date = datetime.strptime(str(args[1]), '%d.%m.%Y').date()
+    except ValueError:
+        print("Birthday format issue. Please enter birthday "
+              "in DD.MM.YY format")
+        input('Press Enter to back in menu >')
+        return
+    contacts = book.search_birthday(date)
+    if contacts:
+        contacts.display_all()
+    else:
+        print(f'\t Birthday {date} is not found \n')
+    input('Press Enter to back in menu >')
+
+
 commands = {add_command: ['add'],
             show_all_command: ['show all'],
             days_to_birthday: ['days left'],
+            who_born: ['who born'],
             find_phone_command: ['find phone'],
             change_phone_command: ['change phone'],
             back_command: ['main menu'],
@@ -244,6 +272,7 @@ inp_vocab_2 = {
     'add': 'If you use this option, add contact name, optional info - phone, birth date, e-mail',
     'show all': 'If you use this option, no extra input required',
     'days left': 'If you use this option, add contact name',
+    'who born': 'If you use this option, add date in DD.MM.YY format',
     'find phone': 'If you use this option, add contact name',
     'change phone': 'If you use this option, add cont. name, previous phone number, new phone number',
     'change birthday': 'If you use this option, add contact name,  desired birth date',
@@ -275,6 +304,7 @@ def parser(user_input: str):
                 return command, data
     if user_input not in commands.items():
         print('You have typed wrong command. Please try again\n')
+        input('Press Enter to back in menu >')
         return None
 
 

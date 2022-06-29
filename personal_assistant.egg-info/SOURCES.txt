@@ -4,6 +4,7 @@ README.md
 setup.py
 app/main_menu.py
 app/contact_book/__init__.py
+app/contact_book/contactbook.json
 app/contact_book/contactbook.py
 app/contact_book/contactbook_menu.py
 app/contact_book/record.py
@@ -14,6 +15,7 @@ app/file_work/parsing.py
 app/note_book/__init__.py
 app/note_book/note_book.py
 app/note_book/note_book_menu.py
+app/note_book/notebook.json
 app/tests/__init__.py
 app/tests/test_contact_book.py
 app/tests/test_record.py

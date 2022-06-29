@@ -1,6 +1,8 @@
 from collections import UserDict
-from app.contact_book.record import Record, Birthday, Name, Email
+from app.contact_book.record import Record, Birthday, Name, Email, Phone
 import json
+from typing import List
+from datetime import date
 
 
 class ContactBook(UserDict):
@@ -43,12 +45,20 @@ class ContactBook(UserDict):
         return False
 
     def edit_birthday(self, name: str, new_birthday: str):
+        """
+        Validate and edit specific person's birthday
+        :param name: str, new_birthday: str
+        """
         rec = self.search(name)
         if not rec:
             return 'No record with this name'
         rec.edit_birthday(new_birthday)
 
     def edit_name(self, name: str, new_name: str):
+        """
+        Validate and edit specific person's name
+        :param name: str, new_name: str
+        """
         rec = self.search(name)
         if not rec:
             return 'No record with this name'
@@ -77,6 +87,18 @@ class ContactBook(UserDict):
         if name in self.names:
             rec = self.data.get(name)
             return rec
+
+    def search_partly(self, name: str):
+        """
+        Search record in storage by part of name
+        :param name: str
+        :return: List[Record]
+        """
+        contacts = ContactBook()
+        for item in self.names:
+            if item.lower().startswith(name.lower()):
+                contacts.add(self.data.get(item))
+        return contacts
 
     def display(self, name):
         """
@@ -162,8 +184,32 @@ class ContactBook(UserDict):
             return rec
 
     def edit_email(self, name: str, old_email: str, new_email: str):
+        """
+        Change specific phone number
+        :param name: str, old_email: str, new_email: str
+        """
         rec = self.search(name)
         if not rec:
             return 'No record with this name'
         rec.edit_email(Email(old_email), Email(new_email))
         return rec
+
+    def search_birthday(self, date_format: date):
+        """
+        Search date in storage by email
+        :param date_format: date
+        :return: ContactBook
+        """
+        cb = ContactBook()
+        for record in self.data.values():
+            if record.birthday is None:
+                continue
+            if date_format.month == record.birthday.value.month and \
+                    date_format.day == record.birthday.value.day:
+                cb.add(record)
+
+        if cb:
+            return cb
+        return None
+
+

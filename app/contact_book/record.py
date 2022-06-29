@@ -42,8 +42,8 @@ class Birthday(Field):
         try:
             self._value = datetime.strptime(data, '%d.%m.%Y').date()
         except ValueError:
-            print(
-                "Birthday format issue. Please enter birthday in DD.MM.YY format")
+            print("Birthday format issue. Please enter birthday in "
+                  "DD.MM.YY format")
 
     @property
     def value_as_str(self):
@@ -90,7 +90,6 @@ class Phone(Field):
 
     def __init__(self, value) -> None:
         super().__init__(value)
-
 
     @Field.value.setter
     def value(self, value: str):
@@ -277,17 +276,6 @@ class Record:
             if num.value == number.value:
                 return number
 
-
-    def email_in_list(self, mail: Email):
-        """
-        Get phone email position for working with email functions
-        :param mail: Email
-        """
-        for email in self.emails:
-            if mail.value == email.value:
-                return email
-
-
     def get_phone(self, num: str) -> Phone:
         """
         Get specific phone number
@@ -354,17 +342,34 @@ class Record:
         return f'{", ".join([p.value for p in self.nums])}'
 
     def edit_birthday(self, new_birthday: str):
+        """
+        Edit specific person's birthday
+        :param new_birthday: str
+        """
         self.birthday.value = new_birthday
 
     def edit_name(self, new_name: str):
+        """
+        Edit specific person's name
+        :param new_name: str
+        """
         self.name.value = new_name
 
     def email_in_list(self, mail: Email):
+        """
+        Get phone email position for working with email functions
+        :param mail: Email
+        """
         for email in self.emails:
             if mail.value == email.value:
                 return email
 
     def edit_email(self, email: Email, new_email: Email):
+        """
+        Validate and edit specific person's email
+        :param email: Email,
+        :param new_email: Email
+        """
         if not isinstance(email, Email):
             print('\t Email not found, please enter correctly \n')
             return
