@@ -212,13 +212,13 @@ def change_email_command(*args):
     except IndexError:
         print('You need to put old email')
         input('Press Enter to back in menu >')
-
+        return
     try:
         new_email = args[3]
     except IndexError:
         print('You need to put new email')
         input('Press Enter to back in menu >')
-
+        return
     try:
         record = book.edit_email(name, old_email, new_email)
         if record:

@@ -180,19 +180,13 @@ class Record:
             birth = ''
         rec += '\t  {:<8} : {:<15}'.format('BIRTHDAY', birth) + '\n'
 
-        indx = 1
         for phone in self.nums:
             num = str(phone.value) if phone.value else ''
-            rec += '\t  {:<8} : {:<15}'.format(f'NUMBER {indx}',
-                                               num) + '\n'
-            indx += 1
+            rec += '\t  {:<8} : {:<15}'.format(f'NUMBER', num) + '\n'
 
-        indx = 1
         for email in self.emails:
             mail = str(email.value) if email.value else ''
-            rec += '\t  {:<8} : {:<15}'.format(f'EMAIL {indx}',
-                                               mail) + '\n'
-            indx += 1
+            rec += '\t  {:<8} : {:<15}'.format(f'EMAIL', mail) + '\n'
         rec += f'\t {"." * 30} \n'
         print(rec)
 
