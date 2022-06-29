@@ -3,7 +3,8 @@ from pathlib import Path
 import pkg_resources
 
 FILE_NOTE_BOOK = pkg_resources.resource_filename(__name__,
-                                                 'contactbook.json')
+                                                 'app/notebook.json')
+# FILE_NOTE_BOOK = ('app/notebook.json')
 
 
 class Session:
@@ -13,11 +14,9 @@ class Session:
 
     def __enter__(self):
         if self.file.exists():
-            # pass
             self.book.load(str(self.file))
 
     def __exit__(self, exception_type, exception_value, traceback):
-        # pass
         self.book.save(str(self.file))
 
 
