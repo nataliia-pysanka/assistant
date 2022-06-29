@@ -1,3 +1,16 @@
+Metadata-Version: 2.1
+Name: personal-assistant
+Version: 1.0.4
+Summary: Package to assist your contacts, notes and files
+Home-page: https://github.com/nataliia-pysanka/assistant
+Author: group-8
+Author-email: pysankanataliia@gmail.com
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
 # Personal assistant
 
 The assistant could:

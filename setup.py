@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="personal_assistant",
-    version="1.0.1",
+    version="1.0.4",
     author="group-8",
     author_email="pysankanataliia@gmail.com",
     description="Package to assist your contacts, notes and files",

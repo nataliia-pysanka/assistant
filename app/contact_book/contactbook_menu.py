@@ -4,7 +4,7 @@ from pathlib import Path
 import pkg_resources
 
 FILE_CONTACT_BOOK = pkg_resources.resource_filename(__name__,
-                                                    'app/contactbook.json')
+                                                    'contactbook.json')
 # FILE_CONTACT_BOOK = ('app/contactbook.json')
 
 

@@ -3,7 +3,7 @@ from pathlib import Path
 import pkg_resources
 
 FILE_NOTE_BOOK = pkg_resources.resource_filename(__name__,
-                                                 'app/notebook.json')
+                                                 'notebook.json')
 # FILE_NOTE_BOOK = ('app/notebook.json')
 
 

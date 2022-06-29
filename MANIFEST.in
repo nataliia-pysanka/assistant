@@ -1,4 +1,4 @@
 include README.md
 include LICENSE
-include app/notebook.json
-include app/contactbook.json
+include app/note_book/notebook.json
+include app/contact_book/contactbook.json
