@@ -277,17 +277,6 @@ class Record:
             if num.value == number.value:
                 return number
 
-
-    def email_in_list(self, mail: Email):
-        """
-        Get phone email position for working with email functions
-        :param mail: Email
-        """
-        for email in self.emails:
-            if mail.value == email.value:
-                return email
-
-
     def get_phone(self, num: str) -> Phone:
         """
         Get specific phone number
@@ -360,6 +349,10 @@ class Record:
         self.name.value = new_name
 
     def email_in_list(self, mail: Email):
+        """
+        Get phone email position for working with email functions
+        :param mail: Email
+        """
         for email in self.emails:
             if mail.value == email.value:
                 return email

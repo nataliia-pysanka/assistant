@@ -1,8 +1,11 @@
 from app.contact_book.contactbook import ContactBook
 from app.contact_book.record import Record, Name, Phone, Email, Birthday
 from pathlib import Path
+import pkg_resources
 
-FILE_CONTACT_BOOK = 'app/contactbook.json'
+FILE_CONTACT_BOOK = pkg_resources.resource_filename(__name__,
+                                                    'contactbook.json')
+# FILE_CONTACT_BOOK = ('app/contactbook.json')
 
 
 class Session:
@@ -105,9 +108,12 @@ def find_phone_command(*args):
     """
     book, name = args
     try:
-        record = book.search(name)
-        if record:
-            record.print()
+        # record = book.search(name)
+        # if record:
+        #     record.print()
+        contacts: ContactBook = book.search_partly(name)
+        if contacts:
+            contacts.display_all()
         else:
             print('No information')
         input('Press Enter to back in menu >')

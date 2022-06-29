@@ -1,6 +1,7 @@
 from collections import UserDict
 from app.contact_book.record import Record, Birthday, Name, Email
 import json
+from typing import List
 
 
 class ContactBook(UserDict):
@@ -77,6 +78,18 @@ class ContactBook(UserDict):
         if name in self.names:
             rec = self.data.get(name)
             return rec
+
+    def search_partly(self, name: str):
+        """
+        Search record in storage by part of name
+        :param name: str
+        :return: List[Record]
+        """
+        contacts = ContactBook()
+        for item in self.names:
+            if item.lower().startswith(name.lower()):
+                contacts.add(self.data.get(item))
+        return contacts
 
     def display(self, name):
         """
