@@ -1,8 +1,8 @@
-from contact_book.contactbook import ContactBook
-from contact_book.record import Record, Name, Phone, Email, Birthday
+from app.contact_book.contactbook import ContactBook
+from app.contact_book.record import Record, Name, Phone, Email, Birthday
 from pathlib import Path
 
-FILE_CONTACT_BOOK = 'contactbook.json'
+FILE_CONTACT_BOOK = 'app/contactbook.json'
 
 
 class Session:

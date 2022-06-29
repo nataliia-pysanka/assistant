@@ -1,0 +1,4 @@
+app
+build
+dist
+venv_10
