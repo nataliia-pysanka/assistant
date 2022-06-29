@@ -1,9 +1,6 @@
-from multiprocessing.sharedctypes import Value
-from pyparsing import nums
 from contact_book.contactbook import ContactBook
 from contact_book.record import Record, Name, Phone, Email, Birthday
 from pathlib import Path
-from datetime import datetime
 
 FILE_CONTACT_BOOK = 'contactbook.json'
 
@@ -15,11 +12,9 @@ class Session:
 
     def __enter__(self):
         if self.file.exists():
-            # pass
             self.book.load(str(self.file))
 
     def __exit__(self, exception_type, exception_value, traceback):
-        # pass
         self.book.save(str(self.file))
 
 

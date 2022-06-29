@@ -236,4 +236,3 @@ def note_book_main():
             if command is back_command:
                 return
             command(note_book, *data)
-
