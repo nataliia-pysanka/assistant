@@ -11,12 +11,12 @@ class Session:
 
     def __enter__(self):
         if self.file.exists():
-            pass
-            # self.book.load(str(self.file))
+            # pass
+            self.book.load(str(self.file))
 
     def __exit__(self, exception_type, exception_value, traceback):
-        pass
-        # self.book.save(str(self.file))
+        # pass
+        self.book.save(str(self.file))
 
 
 def add_note_command(*args):
@@ -27,6 +27,10 @@ def add_note_command(*args):
     name = args[1]
     if name == '':
         print('Name is obligatory parameter')
+        input('Press Enter to back in menu >')
+        return
+    if book.search(name):
+        print('Note with such name already exist')
         input('Press Enter to back in menu >')
         return
     try:
@@ -48,7 +52,7 @@ def add_note_command(*args):
         text_obj = Text(text)
     except ValueError as err:
         print(err)
-        text = None
+        text_obj = Text(None)
 
     note = Note(name=name_obj, text=text_obj, tags=tags)
     book.add(note)
@@ -71,49 +75,99 @@ def add_tag_command(*args):
     except IndexError:
         print('No tag to add')
         input('Press Enter to back in menu >')
-
+        return
     try:
         tag_obj = Tag(tag)
     except ValueError as err:
         print(err)
-
+        input('Press Enter to back in menu >')
+        return
     book.add_tag(name, tag_obj)
     book.display(name)
+    input('Press Enter to back in menu >')
 
 
 def change_text_command(*args):
     """
     Editing note content command
     """
-    return 'change_text_command'
+    book = args[0]
+    name = args[1]
+    if name == '':
+        print('Name is obligatory parameter')
+        input('Press Enter to back in menu >')
+        return
+    text = input(f'Input text (max {Text.max_text_length} symbols) > ')
+    try:
+        text_obj = Text(text)
+    except ValueError as err:
+        print(err)
+        return
+    book.add_text(name, text_obj)
+    book.display(name)
+    input('Press Enter to back in menu >')
 
 
 def show_single_command(*args):
     """
     Displaying one of the notes command
     """
-    return 'show_single_command'
+    book = args[0]
+    name = args[1]
+    if name == '':
+        print('Name is obligatory parameter')
+        input('Press Enter to back in menu >')
+        return
+    note = book.search(name)
+    if note:
+        note.print()
+    else:
+        print('No note with such name')
+    input('Press Enter to back in menu >')
 
 
 def show_all_command(*args):
     """
     Displaying all of the commands
     """
-    return 'show_all_command'
+    book = args[0]
+    if len(book) > 0:
+        book.display_all()
+    else:
+        print('No notes')
+    input('Press Enter to back in menu >')
 
 
 def search_note_command(*args):
     """
     Searching the note by tag command
     """
-    return 'search_note_command'
+    book = args[0]
+    tag = args[1]
+    if tag is None:
+        print('No tag to search')
+        input('Press Enter to back in menu >')
+        return
+    book.search_tag(tag)
+    input('Press Enter to back in menu >')
 
 
 def delete_note_command(*args):
     """
     Deleting the note byt it's name command
     """
-    return 'delete_note_command'
+    book = args[0]
+    name = args[1]
+    if name == '':
+        print('Name is obligatory parameter')
+        input('Press Enter to back in menu >')
+        return
+    note = book.search(name)
+    if note:
+        book.delete(note)
+    else:
+        print('No note with such name')
+    input('Press Enter to back in menu >')
 
 
 def back_command(*args):
@@ -129,13 +183,13 @@ commands = {add_note_command: ['add note'],
             show_single_command: ['show note'],
             show_all_command: ['show all'],
             search_note_command: ['search note'],
-            delete_note_command: ['delete name'],
+            delete_note_command: ['delete note'],
             back_command: ['main menu']}
 
 inp_vocab = {'add note':'If you use this option, add note heder,optional tag',
             'add tag':'If you use this option, add existing note header and new tag',
             'change text':'If you use this option, add note header and text to replace',
-            'show single':'If you use this option, add note header',
+            'show note':'If you use this option, add note header',
             'show all':'If you use this option, no extra args required',
             'search note':'If you use this option, input to search in tags',
             'delete note':'If you use this option, add note header',
@@ -181,5 +235,5 @@ def note_book_main():
             command, data = parsered
             if command is back_command:
                 return
-            print(command(note_book, *data))
+            command(note_book, *data)
 

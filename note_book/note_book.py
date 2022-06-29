@@ -1,6 +1,6 @@
 from collections import UserDict
 import json
-#from faker import Faker
+from faker import Faker
 from random import randint
 from typing import List
 
@@ -94,14 +94,16 @@ class Note:
             self.tags.append(new_tag)
             return new_tag
 
-    def add_text(self, new_txt: Text):
+    def change_text(self, new_txt: Text):
         """
         Validate and add new note content to the notebook
         :param new_txt: Text
         """
         if not isinstance(new_txt, Text):
             raise TypeError('\t Text can not be added \n')
-        if not self.text:
+        if self.text:
+            self.text.value = new_txt.value
+        else:
             self.text = new_txt
 
     def delete_tag(self, tag: Tag):
@@ -128,7 +130,7 @@ class Note:
         rec += '\t  {:<8} : {:<15}'.format('NAME', str(self.name.value)) + '\n'
 
         tags = ' '.join(str(tag.value) for tag in self.tags)
-        rec += '\t  {:<8} : {:<15}'.format(f'TAGS', tags + '\n')
+        rec += '\t  {:<8} : {:<15}'.format(f'TAGS', tags) + '\n'
 
         rec += '.' * 120 + '\n'
         rec += '{:^120}'.format(self.text.value)
@@ -171,11 +173,10 @@ class Note:
         if note['name']:
             self.name.value = note['name']
         if note['text']:
-            self.add_text(Text(note['text']))
+            self.change_text(Text(note['text']))
         if note['tags']:
             for tag in note['tags']:
                 self.add_tag(Tag(tag))
-
 
 
 class NoteBook(UserDict):
@@ -185,7 +186,7 @@ class NoteBook(UserDict):
     def __init__(self):
         super().__init__()
         self.counter = 0
-
+        self.names = []
 
     def add(self, note: Note):
         """
@@ -194,7 +195,7 @@ class NoteBook(UserDict):
         """
         key = note.name.value
         self.data[key] = note
-        print(self.data.keys())
+        self.names.append(key)
 
     def add_tag(self, name: str, tag_obj: Tag):
         note = self.search(name)
@@ -204,21 +205,30 @@ class NoteBook(UserDict):
             except ValueError as err:
                 print(err)
 
+    def add_text(self, name: str, text: Text):
+        note = self.search(name)
+        if note:
+            try:
+                note.change_text(text)
+            except ValueError as err:
+                print(err)
+
     def search_tag(self, tag: str):
         for note in self.data.values():
             if note.has_tag(tag):
                 note.print()
 
     def delete(self, note: Note):
-        if note.name in self.data:
-            del self.data[note.name]
+        if note.name.value in self.names:
+            del self.data[note.name.value]
+            self.names.remove(note.name.value)
 
     def display_all(self):
         """
         Display all  records
         :return: None
         """
-        for record in self.data.values():
+        for record in self:
             record.print()
 
     def search(self, name: str) -> Note:
@@ -260,9 +270,12 @@ class NoteBook(UserDict):
         """
         self.clear()
         with open(filename, 'r', encoding='UTF-8') as f:
-            dump = json.load(f)
+            try:
+                dump = json.load(f)
+            except ValueError:
+                return
         for note in dump:
-            txt = Note(name=Name('none'))
+            txt = Note(name=Name('temp'))
             txt.deserealize(note)
             self.add(txt)
 
@@ -273,10 +286,25 @@ class NoteBook(UserDict):
         """
         self.data = {}
 
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        while self.counter < len(self.names):
+            if self.counter > 0 and self.counter % 3 == 0:
+                input('Press Enter to continue >')
+            index = self.counter
+            self.counter += 1
+            return self.data[self.names[index]]
+
+        self.counter = 0
+        raise StopIteration
+
 
 # def fake_records(book: NoteBook):
 #     for i in range(50):
-#         name = Name(fake.text(max_nb_chars=Name.max_name_length)[:-1])
+#         name = Name(fake.text(max_nb_chars=Name.max_name_length)[:-1].
+#                     replace(' ', ''))
 #         text = Text(fake.text(max_nb_chars=Text.max_text_length)[:-1])
 #         tags = []
 #         for _ in range(randint(1, 4)):
@@ -286,8 +314,8 @@ class NoteBook(UserDict):
 #         note = Note(name=name, text=text, tags=tags)
 #         book.add(note)
 #     return book
-#
-#
+
+
 # if __name__ == '__main__':
 #     fake = Faker()
 #
@@ -296,11 +324,11 @@ class NoteBook(UserDict):
 #         tags_names.append(fake.text(
 #                 max_nb_chars=Tag.max_tag_length)[:-1].replace(' ', '').lower())
 #
-#     # book = fake_records(NoteBook())
-#     # book.display_all()
-#     # book.save('notebook.json')
-#     book = NoteBook()
-#     book.load('notebook.json')
+#     book = fake_records(NoteBook())
 #     book.display_all()
-#     # book.display_all()
-#     # book.save('contactbook.json')
+#     book.save('notebook.json')
+    # book = NoteBook()
+    # book.load('notebook.json')
+    # book.display_all()
+    # book.display_all()
+    # book.save('contactbook.json')
