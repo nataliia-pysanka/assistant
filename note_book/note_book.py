@@ -3,7 +3,6 @@ import json
 from faker import Faker
 from random import randint
 from typing import List
-from operator import itemgetter
 
 
 
@@ -258,17 +257,16 @@ class NoteBook(UserDict):
     #             continue
     #     return notebook
 
-    def sort_by_tag(self, tag: Tag):
+    def sort_by_tag(self):
         """
         Sort notes by tags
         :param tag: Tag
         """
-        notebook = NoteBook()
         try:
-            sorted_tags = sorted(notebook, key=itemgetter('tag'))
+            sorted_tags = sorted(self.data, key=lambda x: x[2])
             print(sorted_tags)
         except:
-            print(f'\t The tag {tag} is not found \n')
+            print(f'\t Notebook is empty, nothing to sort \n')
 
 
     def display_all(self):
@@ -376,6 +374,6 @@ if __name__ == '__main__':
 #     # book.save('notebook.json')
     book = NoteBook()
     book.load('notebook.json')
-    book.sort_by_tag('hospital')
-    # book.display_all()
+    book.sort_by_tag()
+    book.display_all()
 #     # book.save('contactbook.json')
