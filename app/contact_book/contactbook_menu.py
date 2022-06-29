@@ -1,11 +1,8 @@
-from multiprocessing.sharedctypes import Value
-from pyparsing import nums
-from contact_book.contactbook import ContactBook
-from contact_book.record import Record, Name, Phone, Email, Birthday
+from app.contact_book.contactbook import ContactBook
+from app.contact_book.record import Record, Name, Phone, Email, Birthday
 from pathlib import Path
-from datetime import datetime
 
-FILE_CONTACT_BOOK = 'contactbook.json'
+FILE_CONTACT_BOOK = 'app/contactbook.json'
 
 
 class Session:
@@ -15,11 +12,9 @@ class Session:
 
     def __enter__(self):
         if self.file.exists():
-            # pass
             self.book.load(str(self.file))
 
     def __exit__(self, exception_type, exception_value, traceback):
-        # pass
         self.book.save(str(self.file))
 
 
@@ -217,13 +212,13 @@ def change_email_command(*args):
     except IndexError:
         print('You need to put old email')
         input('Press Enter to back in menu >')
-
+        return
     try:
         new_email = args[3]
     except IndexError:
         print('You need to put new email')
         input('Press Enter to back in menu >')
-
+        return
     try:
         record = book.edit_email(name, old_email, new_email)
         if record:

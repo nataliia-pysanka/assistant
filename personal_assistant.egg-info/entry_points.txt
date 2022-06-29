@@ -1,0 +1,2 @@
+[console_scripts]
+assistant = app.main_menu:initial_main

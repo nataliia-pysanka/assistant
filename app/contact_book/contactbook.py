@@ -1,9 +1,6 @@
 from collections import UserDict
-from contact_book.record import Record, Birthday, Name, Email
+from app.contact_book.record import Record, Birthday, Name, Email
 import json
-from faker import Faker
-from datetime import datetime
-import random
 
 
 class ContactBook(UserDict):
@@ -164,34 +161,9 @@ class ContactBook(UserDict):
             old_num_obj.value = new_num
             return rec
 
-    def edit_email(self, name: str, old_email:str, new_email: str):
+    def edit_email(self, name: str, old_email: str, new_email: str):
         rec = self.search(name)
         if not rec:
             return 'No record with this name'
-        rec.edit_email(old_email, new_email)
-
-
-# operators = ["067", "068", "096", "097", "098",
-#              "050", "066", "095", "099", "063", "073", "093"]
-#
-#
-# def fake_records(book: ContactBook):
-#     for i in range(50):
-#         name = fake.first_name()
-#         date = fake.date_between(start_date='-70y', end_date='-15y')
-#         date_birth = datetime.strftime(date, '%d.%m.%Y')
-#         code = random.choice(operators)
-#         phone = code + str(fake.random_number(digits=9, fix_len=True))
-#         email = fake.simple_profile()['mail']
-#         rec = Record(name=Name(name), num=Phone(phone),
-#                      birthday=Birthday(date_birth), email=Email(email))
-#         book.add(rec)
-#     return book
-#
-#
-# if __name__ == '__main__':
-#     fake = Faker()
-#
-#     book = fake_records(ContactBook())
-#     # book.display_all()
-#     book.save('contactbook.json')
+        rec.edit_email(Email(old_email), Email(new_email))
+        return rec

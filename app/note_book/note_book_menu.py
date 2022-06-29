@@ -1,7 +1,7 @@
-from note_book.note_book import Note, NoteBook, Text, Tag, Name
+from app.note_book.note_book import Note, NoteBook, Text, Tag, Name
 from pathlib import Path
 
-FILE_NOTE_BOOK = 'notebook.json'
+FILE_NOTE_BOOK = 'app/notebook.json'
 
 
 class Session:
@@ -236,4 +236,3 @@ def note_book_main():
             if command is back_command:
                 return
             command(note_book, *data)
-

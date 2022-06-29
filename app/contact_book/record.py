@@ -1,6 +1,5 @@
 import re
 from datetime import datetime
-from datetime import date
 
 
 class Field:
@@ -181,19 +180,13 @@ class Record:
             birth = ''
         rec += '\t  {:<8} : {:<15}'.format('BIRTHDAY', birth) + '\n'
 
-        indx = 1
         for phone in self.nums:
             num = str(phone.value) if phone.value else ''
-            rec += '\t  {:<8} : {:<15}'.format(f'NUMBER {indx}',
-                                               num) + '\n'
-            indx += 1
+            rec += '\t  {:<8} : {:<15}'.format(f'NUMBER', num) + '\n'
 
-        indx = 1
         for email in self.emails:
             mail = str(email.value) if email.value else ''
-            rec += '\t  {:<8} : {:<15}'.format(f'EMAIL {indx}',
-                                               mail) + '\n'
-            indx += 1
+            rec += '\t  {:<8} : {:<15}'.format(f'EMAIL', mail) + '\n'
         rec += f'\t {"." * 30} \n'
         print(rec)
 
@@ -381,36 +374,3 @@ class Record:
             mail_in_list.value = new_email.value
             return
         raise ValueError(f'\t Email {email.value} is not found \n')
-
-
-
-
-# if __name__ == "__main__":
-#     e = Email('first@go.com')
-#     print(e)
-#     rec = Record(name='Kim', email=e)
-#     rec.print()
-#     rec.add_email(e)
-#     rec.print()
-#     try:
-#         rec.add_phone(Phone('088765432'))
-#     except ValueError as err:
-#         print(err)
-#     print(rec)
-#     rec.add_phone(Phone('066-765-43-36'))
-#     rec.add_phone(Phone('+38(095)654-34-23'))
-#     rec.print()
-    # rec.add_email(Email('hello@ukr.net'))
-    # rec.add_email(Email('go@gmail.com'))
-    # print(rec.get_phone('088765434'))
-    # rec.print()
-    # rec.remove_phone(Phone('088765434'))
-    # rec.print()
-    # rec.edit_phone(Phone('088765433'), Phone('999'))
-    # rec.print()
-    #
-    # b = Birthday('01.01.2000')
-    # print(b.value_as_str)
-    #
-    # print(b.days_to_birthday())
-    # rec.remove_phone(Phone('088765434'))
