@@ -108,9 +108,12 @@ def find_phone_command(*args):
     """
     book, name = args
     try:
-        record = book.search(name)
-        if record:
-            record.print()
+        # record = book.search(name)
+        # if record:
+        #     record.print()
+        contacts: ContactBook = book.search_partly(name)
+        if contacts:
+            contacts.display_all()
         else:
             print('No information')
         input('Press Enter to back in menu >')
