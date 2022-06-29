@@ -1,7 +1,9 @@
 from app.note_book.note_book import Note, NoteBook, Text, Tag, Name
 from pathlib import Path
+import pkg_resources
 
-FILE_NOTE_BOOK = 'app/notebook.json'
+FILE_NOTE_BOOK = pkg_resources.resource_filename(__name__,
+                                                 'contactbook.json')
 
 
 class Session:

@@ -18,6 +18,7 @@ setup(
         "Operating System :: OS Independent",
     ],
     packages=find_namespace_packages(),
+    include_package_data=True,
     install_requires=['pathlib==1.0.1'],
     entry_points={'console_scripts': [
         'assistant=app.main_menu:initial_main'

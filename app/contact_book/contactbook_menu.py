@@ -1,8 +1,11 @@
 from app.contact_book.contactbook import ContactBook
 from app.contact_book.record import Record, Name, Phone, Email, Birthday
 from pathlib import Path
+import pkg_resources
 
-FILE_CONTACT_BOOK = 'app/contactbook.json'
+# FILE_CONTACT_BOOK = pkg_resources.resource_filename(__name__,
+#                                                     'contactbook.json')
+FILE_CONTACT_BOOK = ('app/contactbook.json')
 
 
 class Session:
