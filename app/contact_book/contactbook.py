@@ -1,6 +1,8 @@
 from collections import UserDict
 from app.contact_book.record import Record, Birthday, Name, Email
 import json
+from datetime import datetime
+from datetime import date
 
 
 class ContactBook(UserDict):
@@ -77,6 +79,19 @@ class ContactBook(UserDict):
         if name in self.names:
             rec = self.data.get(name)
             return rec
+
+    def search_date(self, date: str):
+        """
+        Search date in storage by email
+        :param name: str
+        :return: Record
+        """
+        date_format = datetime.strptime(str(self.date), '%d.%m.%Y')
+        for birthday in self.birthdays:
+            if date_format.month == birthday.month and date_format.day == birthday.day:
+                return birthday
+            else:
+                print(f'Birthday {date} not found')
 
     def display(self, name):
         """

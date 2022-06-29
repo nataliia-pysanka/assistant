@@ -374,3 +374,5 @@ class Record:
             mail_in_list.value = new_email.value
             return
         raise ValueError(f'\t Email {email.value} is not found \n')
+
+
