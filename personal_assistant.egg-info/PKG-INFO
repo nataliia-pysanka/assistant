@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: personal-assistant
-Version: 1.0.4
+Version: 1.0.5
 Summary: Package to assist your contacts, notes and files
 Home-page: https://github.com/nataliia-pysanka/assistant
 Author: group-8
@@ -31,7 +31,7 @@ Worked under Python 3.10.5
 
 You just need to install this package with command:
 ```
-pip install -i https://test.pypi.org/simple/ personal-assistant==1.0.4
+pip install -i https://test.pypi.org/simple/ personal-assistant==1.0.5
 ```
 or from folder with setup.py file:
 ```
