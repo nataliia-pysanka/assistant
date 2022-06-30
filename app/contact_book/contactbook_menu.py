@@ -6,7 +6,6 @@ from datetime import datetime
 
 FILE_CONTACT_BOOK = pkg_resources.resource_filename(__name__,
                                                     'contactbook.json')
-# FILE_CONTACT_BOOK = ('app/contactbook.json')
 
 
 class Session:
@@ -33,6 +32,10 @@ def add_command(*args):
         input('Press Enter to back in menu >')
         return
 
+    if book.search(name):
+        print('This name already in use')
+        input('Press Enter to back in menu >')
+        return
     try:
         nums = None if args[2] == '-' else args[2]
     except IndexError:
@@ -143,29 +146,28 @@ def change_phone_command(*args):
         return
 
     try:
-        new_num = args[2]
-    except IndexError:
-        return
-    if not record.get_phone(new_num):
-        record.add_phone(Phone(new_num))
-        record.print()
-        input('Press Enter to back in menu >')
-        return
-    try:
-        new_num = args[3]
+        one_num = args[2]
     except IndexError:
         print('You need to put new number')
         input('Press Enter to back in menu >')
         return
+
+    if not record.get_phone(one_num):
+        record.add_phone(Phone(one_num))
+
     try:
-        record = book.edit_phone(name, new_num)
-        if record:
-            record.print()
-        else:
-            print('No information')
+        new_num = args[3]
+    except IndexError:
+        record.print()
         input('Press Enter to back in menu >')
-    except ValueError as err:
-        print(err)
+        return
+
+    record = book.edit_phone(name, one_num, new_num)
+    if record:
+        record.print()
+    else:
+        print('No information')
+    input('Press Enter to back in menu >')
 
 
 def back_command():
@@ -181,6 +183,16 @@ def change_birthday_command(*args):
     """ 
     book = args[0]
     name = args[1]
+    if name == '':
+        print('Name is obligatory parameter')
+        input('Press Enter to back in menu >')
+        return
+
+    record = book.search(name)
+    if not record:
+        print('No contact with such name')
+        return
+
     try:
         new_birthday = args[2]
     except IndexError:
@@ -231,28 +243,38 @@ def change_email_command(*args):
     """
     book = args[0]
     name = args[1]
+    if name == '':
+        print('Name is obligatory parameter')
+        input('Press Enter to back in menu >')
+        return
+
     record = book.search(name)
     if not record:
         print('No contact with such name')
         return
+
     try:
-        new_email = args[2]
+        one_email = args[2]
     except IndexError:
+        print('You need to put new number')
+        input('Press Enter to back in menu >')
         return
-    if not record.get_email(new_email):
-        record.add_email(Email(new_email))
+    if not record.get_email(one_email):
+        record.add_email(Email(one_email))
+
+    try:
+        new_email = args[3]
+    except IndexError:
         record.print()
         input('Press Enter to back in menu >')
         return
-    try:
-        record = book.edit_email(name, new_email)
-        if record:
-            record.print()
-        else:
-            print('No information')
-        input('Press Enter to back in menu >')
-    except ValueError as err:
-        print(err)
+
+    record = book.edit_email(name, one_email, new_email)
+    if record:
+        record.print()
+    else:
+        print('No information')
+    input('Press Enter to back in menu >')
 
 
 def who_born(*args):
