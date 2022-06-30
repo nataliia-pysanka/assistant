@@ -1,7 +1,6 @@
 from collections import UserDict
 from app.contact_book.record import Record, Birthday, Name, Email, Phone
 import json
-from typing import List
 from datetime import date
 
 
@@ -44,10 +43,22 @@ class ContactBook(UserDict):
             return True
         return False
 
+    def delete_contact(self, contact: Record):
+        """
+        Delete specific record from the storage
+        :param contact: Record
+        :return: None
+        """
+        if contact.name.value in self.names:
+            del self.data[contact.name.value]
+            self.names.remove(contact.name.value)
+
+
     def edit_birthday(self, name: str, new_birthday: str):
         """
         Validate and edit specific person's birthday
-        :param name: str, new_birthday: str
+        :param name: str,
+        :param new_birthday: str
         """
         rec = self.search(name)
         if not rec:
@@ -173,7 +184,9 @@ class ContactBook(UserDict):
     def edit_phone(self, name: str, old_num: str, new_num: str):
         """
         Change specific phone number
-        :param name: str, old_num: str, new_num: str
+        :param name: str,
+        :param old_num: str,
+        :param new_num: str
         """
         rec = self.search(name)
         if not rec:
@@ -186,7 +199,9 @@ class ContactBook(UserDict):
     def edit_email(self, name: str, old_email: str, new_email: str):
         """
         Change specific phone number
-        :param name: str, old_email: str, new_email: str
+        :param name: str,
+        :param old_email: str,
+        :param new_email: str
         """
         rec = self.search(name)
         if not rec:

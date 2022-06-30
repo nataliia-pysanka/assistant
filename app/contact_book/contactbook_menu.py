@@ -52,22 +52,26 @@ def add_command(*args):
         print(err)
         return
 
-    try:
-        num_obj = Phone(nums)
-    except ValueError as err:
-        print(err)
-        num_obj = None
-    try:
-        birth_obj = Birthday(birthday)
-    except ValueError as err:
-        print(err)
-        birth_obj = None
+    num_obj = None
+    if nums:
+        try:
+            num_obj = Phone(nums)
+        except ValueError as err:
+            print(err)
 
-    try:
-        email_obj = Email(emails)
-    except ValueError as err:
-        print(err)
-        email_obj = None
+    birth_obj = None
+    if birthday:
+        try:
+            birth_obj = Birthday(birthday)
+        except ValueError as err:
+            print(err)
+
+    email_obj = None
+    if emails:
+        try:
+            email_obj = Email(emails)
+        except ValueError as err:
+            print(err)
 
     rec = Record(name=name_obj, num=num_obj,
                  birthday=birth_obj, email=email_obj)
@@ -84,7 +88,9 @@ def show_all_command(*args):
     book, _ = args
     if len(book) > 0:
         book.display_all()
-        input('Press Enter to back in menu >')
+    else:
+        print('No contacts in contactbook!')
+    input('Press Enter to back in menu >')
 
 
 def days_to_birthday(*args):
@@ -98,9 +104,9 @@ def days_to_birthday(*args):
             print(delta)
         else:
             print('No information')
-        input('Press Enter to back in menu >')
     except ValueError as err:
         print(err)
+    input('Press Enter to back in menu >')
 
 
 def find_phone_command(*args):
@@ -109,9 +115,6 @@ def find_phone_command(*args):
     """
     book, name = args
     try:
-        # record = book.search(name)
-        # if record:
-        #     record.print()
         contacts: ContactBook = book.search_partly(name)
         if contacts:
             contacts.display_all()
@@ -128,10 +131,24 @@ def change_phone_command(*args):
     """
     book = args[0]
     name = args[1]
+    if name == '':
+        print('Name is obligatory parameter')
+        input('Press Enter to back in menu >')
+        return
+
+    record = book.search(name)
+    if not record:
+        print('No record with such name')
+        input('Press Enter to back in menu >')
+        return
+
     try:
-        old_num = args[2]
+        new_num = args[2]
     except IndexError:
-        print('You need to put old number')
+        return
+    if not record.get_phone(new_num):
+        record.add_phone(Phone(new_num))
+        record.print()
         input('Press Enter to back in menu >')
         return
     try:
@@ -141,7 +158,7 @@ def change_phone_command(*args):
         input('Press Enter to back in menu >')
         return
     try:
-        record = book.edit_phone(name, old_num, new_num)
+        record = book.edit_phone(name, new_num)
         if record:
             record.print()
         else:
@@ -153,7 +170,7 @@ def change_phone_command(*args):
 
 def back_command():
     """
-    CExit back to the menu command
+    Exit back to the menu command
     """
     return 'back_command'
 
@@ -214,20 +231,21 @@ def change_email_command(*args):
     """
     book = args[0]
     name = args[1]
+    record = book.search(name)
+    if not record:
+        print('No contact with such name')
+        return
     try:
-        old_email = args[2]
+        new_email = args[2]
     except IndexError:
-        print('You need to put old email')
+        return
+    if not record.get_email(new_email):
+        record.add_email(Email(new_email))
+        record.print()
         input('Press Enter to back in menu >')
         return
     try:
-        new_email = args[3]
-    except IndexError:
-        print('You need to put new email')
-        input('Press Enter to back in menu >')
-        return
-    try:
-        record = book.edit_email(name, old_email, new_email)
+        record = book.edit_email(name, new_email)
         if record:
             record.print()
         else:
@@ -257,6 +275,25 @@ def who_born(*args):
     input('Press Enter to back in menu >')
 
 
+def delete_contact_command(*args):
+    """
+    Deleting comment by it's name command
+    """
+    book = args[0]
+    name = args[1]
+    if name == '':
+        print('Name is obligatory parameter')
+        input('Press Enter to back in menu >')
+        return
+    contact = book.search(name)
+    if contact:
+        book.delete_contact(contact)
+        print(f'Record for {name} was eradicated')  # delete method
+    else:
+        print('No contact with such name')
+    input('Press Enter to back in menu >')
+
+
 commands = {add_command: ['add'],
             show_all_command: ['show all'],
             days_to_birthday: ['days left'],
@@ -267,7 +304,9 @@ commands = {add_command: ['add'],
             # optional section
             change_birthday_command: ['change birthday'],
             change_name_command: ['change name'],
-            change_email_command: ['change email']}
+            change_email_command: ['change email'],
+            delete_contact_command: ['delete']}
+
 inp_vocab_2 = {
     'add': 'If you use this option, add contact name, optional info - phone, birth date, e-mail',
     'show all': 'If you use this option, no extra input required',
@@ -278,6 +317,7 @@ inp_vocab_2 = {
     'change birthday': 'If you use this option, add contact name,  desired birth date',
     'change name': 'If you use this option, add existing contact name, desired contact name',
     'change email': 'If you use this option, add existing e-mail, desired e-mail',
+    'delete': 'If you use this option, add existing contact name',
     'main menu': 'If you use this option, you will be sent to main menu'
 }
 
@@ -322,7 +362,7 @@ def contact_book_main():
             command, data = parsered
             if command is back_command:
                 return
-            print(command(contact_book, *data))
+            command(contact_book, *data)
 
 
 if __name__ == '__main__':

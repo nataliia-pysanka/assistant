@@ -279,7 +279,7 @@ class Record:
     def get_phone(self, num: str) -> Phone:
         """
         Get specific phone number
-        :param mail: Email
+        :param num: Email
         """
         for number in self.nums:
             if num == number.value:
@@ -288,7 +288,7 @@ class Record:
     def get_email(self, email: str) -> Email:
         """
         Get specific email
-        :param mail: Email
+        :param email: Email
         """
         for mail in self.emails:
             if email == mail.value:
@@ -346,7 +346,10 @@ class Record:
         Edit specific person's birthday
         :param new_birthday: str
         """
-        self.birthday.value = new_birthday
+        if self.birthday:
+            self.birthday.value = new_birthday
+        else:
+            self.birthday = Birthday(new_birthday)
 
     def edit_name(self, new_name: str):
         """
