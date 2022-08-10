@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  pc:
+    container_name: assistant
+    hostname: assistant
+    image: assistant
+    command: "python3 app/main.py"
+    build:
+      dockerfile: Dockerfile
+      context: .
