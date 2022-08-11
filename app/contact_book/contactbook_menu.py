@@ -1,5 +1,5 @@
-from app.contact_book.contactbook import ContactBook
-from app.contact_book.record import Record, Name, Phone, Email, Birthday
+from contact_book.contactbook import ContactBook
+from contact_book.record import Record, Name, Phone, Email, Birthday
 from pathlib import Path
 import pkg_resources
 

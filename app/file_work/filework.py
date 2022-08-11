@@ -7,8 +7,8 @@ python sort.py /user/Desktop/Хлам
 import sys
 from shutil import unpack_archive
 from pathlib import Path
-import app.file_work.parsing as parser
-from app.file_work.normalization import normalize
+import file_work.parsing as parser
+from file_work.normalization import normalize
 
 
 def handle_files(file_name: Path, target_folder: Path):

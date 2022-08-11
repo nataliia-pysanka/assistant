@@ -1,4 +1,4 @@
-from app.note_book.note_book import Note, NoteBook, Text, Tag, Name
+from note_book.note_book import Note, NoteBook, Text, Tag, Name
 from pathlib import Path
 import pkg_resources
 

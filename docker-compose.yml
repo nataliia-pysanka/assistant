@@ -9,3 +9,5 @@ services:
     build:
       dockerfile: Dockerfile
       context: .
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t

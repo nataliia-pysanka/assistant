@@ -1,5 +1,5 @@
 from collections import UserDict
-from app.contact_book.record import Record, Birthday, Name, Email
+from contact_book.record import Record, Birthday, Name, Email
 import json
 from typing import List
 

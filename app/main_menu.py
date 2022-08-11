@@ -1,6 +1,6 @@
-from app.contact_book.contactbook_menu import contact_book_main
-from app.note_book.note_book_menu import note_book_main
-from app.file_work.filework import file_work_main
+from contact_book.contactbook_menu import contact_book_main
+from note_book.note_book_menu import note_book_main
+from file_work.filework import file_work_main
 
 
 def initial_main():
